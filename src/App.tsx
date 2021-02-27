@@ -1,21 +1,20 @@
 import React from "react";
 import "./App.css";
 
-import { SamplesGraph } from "./components/SamplesGraph";
-import sampleStore from "./stores/SampleStore"
+import SamplesGraph from "./components/SamplesGraph";
+import ClassesCombobox from "./components/ClassesCombobox";
+import classStore from "./stores/ClassStore";
 
 function App() {
   return (
     <div className="App">
       <h1>Plancton visualizer</h1>
+      <ClassesCombobox />
       <SamplesGraph />
     </div>
   );
 }
 
-var callServer = setInterval(function() {
-  console.log("called")
-  sampleStore.updateState()
-}, 50000);
+classStore.updateState();
 
 export default App;
