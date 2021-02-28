@@ -36,7 +36,7 @@ const ClassesCombobox = (props: Props) => {
   const updateClasses = (new_classes: Class[]) => {
       console.log(new_classes)
     setClasses(new_classes);
-    setSelected(new_classes[0]);
+    classStore.setSelected(new_classes[0]);
   };
 
   const changeSelected = (
@@ -49,6 +49,7 @@ const ClassesCombobox = (props: Props) => {
     let selectedClass = classes?.find(
       (_class) => _class.name === event.target.value
     );
+    console.log(selectedClass)
     classStore.setSelected(selectedClass);
   };
 
@@ -62,7 +63,7 @@ const ClassesCombobox = (props: Props) => {
         onChange={changeSelected}
       >
         {classes?.map((_class, index) => 
-          <MenuItem key={_class.name} value={index}>{_class.name}</MenuItem>
+          <MenuItem key={_class.name} value={_class.name}>{_class.name}</MenuItem>
         )}
       </Select>
     </FormControl>
