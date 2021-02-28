@@ -22,22 +22,25 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const ClassesCombobox = (props: Props) => {
   const [classes, setClasses] = useState<Class[]>();
-  const [selected, setSelected] = useState<Class | undefined>(classStore.getSelected());
+  const [selected, setSelected] = useState<Class | undefined>(
+    classStore.getSelected()
+  );
 
   const styles = useStyles();
 
   useEffect(() => {
-    classStore.attach(updateClasses);
+    classStore.attach(setClasses);
     return function cleanup() {
-      classStore.dettach(updateClasses);
+      classStore.dettach(setClasses);
     };
   });
 
-  const updateClasses = (new_classes: Class[]) => {
-      console.log(new_classes)
-    setClasses(new_classes);
-    classStore.setSelected(new_classes[0]);
-  };
+  useEffect(() => {
+    classStore.attachSelect(setSelected);
+    return function cleanup() {
+      classStore.dettachSelect(setSelected);
+    };
+  });
 
   const changeSelected = (
     event: React.ChangeEvent<{
@@ -49,22 +52,24 @@ const ClassesCombobox = (props: Props) => {
     let selectedClass = classes?.find(
       (_class) => _class.name === event.target.value
     );
-    console.log(selectedClass)
     classStore.setSelected(selectedClass);
   };
 
   return (
     <FormControl className={styles.formControl}>
-      <InputLabel htmlFor="grouped-select">Grouping</InputLabel>
+      <InputLabel htmlFor="grouped-select">Class</InputLabel>
       <Select
         defaultValue=""
         displayEmpty
         id="grouped-select"
         onChange={changeSelected}
+        value={selected}
       >
-        {classes?.map((_class, index) => 
-          <MenuItem key={_class.name} value={_class.name}>{_class.name}</MenuItem>
-        )}
+        {classes?.map((_class, index) => (
+          <MenuItem key={_class.name} value={_class.name}>
+            {_class.name}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );

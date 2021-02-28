@@ -8,14 +8,15 @@ import {
   YAxis,
 } from "recharts";
 import { Sample } from "../model/Sample";
+import { Class } from "../model/Class";
 import sampleStore from "../stores/SampleStore";
 import classStore from "../stores/ClassStore";
-import { Class } from "../model/Class";
 
 interface Props {}
 
 const SamplesGraph: React.FC<Props> = () => {
   const [samples, setSamples] = useState<Sample[]>([]);
+  const [selected, setSelected] = useState<Class | undefined>(classStore.getSelected());
 
   useEffect(() => {
     sampleStore.attach(setSamples);
@@ -23,6 +24,13 @@ const SamplesGraph: React.FC<Props> = () => {
       sampleStore.dettach(setSamples);
     };
   }, []);
+
+  useEffect(() => {
+    classStore.attachSelect(setSelected);
+    return function cleanup() {
+      classStore.dettachSelect(setSelected);
+    };
+  }, [])
 
   return (
     <div>
@@ -45,7 +53,12 @@ const SamplesGraph: React.FC<Props> = () => {
         <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
         <Line
           type="monotone"
-          dataKey="values?.find(obj => obj['class_id'] === classStore.getSelected().id).value"
+          dataKey={(sample: Sample) => {
+            let value = sample.values.find(
+              (obj) => obj["class_id"] === selected?.id
+            )?.value;
+            return value
+          }}
           stroke="#8884d8"
         />
         <Tooltip />

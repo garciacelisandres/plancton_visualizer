@@ -8,7 +8,7 @@ import classStore from "./stores/ClassStore";
 function App() {
   return (
     <div className="App">
-      <h1>Plancton visualizer</h1>
+      <h1>PlanCton visualizer</h1>
       <ClassesCombobox />
       <SamplesGraph />
     </div>
