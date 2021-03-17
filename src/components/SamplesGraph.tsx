@@ -11,12 +11,13 @@ import { Sample } from "../model/Sample";
 import { Class } from "../model/Class";
 import sampleStore from "../stores/SampleStore";
 import classStore from "../stores/ClassStore";
+import { useClassSelect } from "../contexts/ClassSelectContext";
 
 interface Props {}
 
 const SamplesGraph: React.FC<Props> = () => {
   const [samples, setSamples] = useState<Sample[]>([]);
-  const [selected, setSelected] = useState<Class | undefined>(classStore.getSelected());
+  const { classSelectState } = useClassSelect();
 
   useEffect(() => {
     sampleStore.attach(setSamples);
@@ -24,13 +25,6 @@ const SamplesGraph: React.FC<Props> = () => {
       sampleStore.dettach(setSamples);
     };
   }, []);
-
-  useEffect(() => {
-    classStore.attachSelect(setSelected);
-    return function cleanup() {
-      classStore.dettachSelect(setSelected);
-    };
-  }, [])
 
   return (
     <div>
@@ -55,7 +49,7 @@ const SamplesGraph: React.FC<Props> = () => {
           type="monotone"
           dataKey={(sample: Sample) => {
             let value = sample.values.find(
-              (obj) => obj["class_id"] === selected?.id
+              (obj) => obj["class_id"] === classSelectState.class?.id
             )?.value;
             return value
           }}

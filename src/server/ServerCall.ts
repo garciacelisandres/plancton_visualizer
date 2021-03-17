@@ -38,20 +38,25 @@ class ServerCall {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
       },
-    }).then((data) => {
-      let samples_list: Sample[] = [];
-      let samples_response = data.data.samples;
-      samples_response.forEach((sample: any) => {
-        let sample_id: string = sample["_id"];
-        let sample_name: string = sample["name"];
-        let sample_date: Date = new Date(sample["date_retrieved"] * 1000);
-        let sample_values: any[] = sample["sample_classes"];
-        samples_list.push(
-          new Sample(sample_id, sample_name, sample_date, sample_values)
-        );
+    })
+      .then((data) => {
+        let samples_list: Sample[] = [];
+        let samples_response = data.data.samples;
+        samples_response.forEach((sample: any) => {
+          let sample_id: string = sample["_id"];
+          let sample_name: string = sample["name"];
+          let sample_date: Date = new Date(sample["date_retrieved"] * 1000);
+          let sample_values: any[] = sample["sample_classes"];
+          samples_list.push(
+            new Sample(sample_id, sample_name, sample_date, sample_values)
+          );
+        });
+        return samples_list;
+      })
+      .catch((err) => {
+        let empty_list: Sample[] = [];
+        return empty_list;
       });
-      return samples_list;
-    });
     return retrieved;
   }
 
@@ -64,16 +69,21 @@ class ServerCall {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
       },
-    }).then((data) => {
-      let classes_list: Class[] = [];
-      let classes_response: any[] = data.data.classes;
-      classes_response.forEach((class_obj) => {
-        let class_id: string = class_obj["_id"];
-        let class_name: string = class_obj["name"];
-        classes_list.push(new Class(class_id, class_name));
+    })
+      .then((data) => {
+        let classes_list: Class[] = [];
+        let classes_response: any[] = data.data.classes;
+        classes_response.forEach((class_obj) => {
+          let class_id: string = class_obj["_id"];
+          let class_name: string = class_obj["name"];
+          classes_list.push(new Class(class_id, class_name));
+        });
+        return classes_list;
+      })
+      .catch((err) => {
+        let empty_list: Class[] = [];
+        return empty_list;
       });
-      return classes_list;
-    });
     return retrieved;
   }
 }

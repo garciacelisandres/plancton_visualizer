@@ -3,11 +3,11 @@ import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import { Class } from "../model/Class";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-
-import classStore from "../stores/ClassStore";
+import { useClassList } from "../contexts/ClassListContext";
+import { ACTION_CLASS_LIST_UPDATE } from "../contexts/reducers/classList/ClassListActions";
+import { useClassSelect } from "../contexts/ClassSelectContext";
+import { ACTION_CLASS_SELECT_UPDATE } from "../contexts/reducers/classSelect/ClassSelectActions";
 
 interface Props {}
 
@@ -21,26 +21,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const ClassesCombobox = (props: Props) => {
-  const [classes, setClasses] = useState<Class[]>();
-  const [selected, setSelected] = useState<Class | undefined>(
-    classStore.getSelected()
-  );
+  const { classListState, classListDispatch } = useClassList();
+  const { classSelectState, classSelectDispatch } = useClassSelect();
 
   const styles = useStyles();
 
   useEffect(() => {
-    classStore.attach(setClasses);
-    return function cleanup() {
-      classStore.dettach(setClasses);
-    };
-  });
-
-  useEffect(() => {
-    classStore.attachSelect(setSelected);
-    return function cleanup() {
-      classStore.dettachSelect(setSelected);
-    };
-  });
+    classListDispatch({ type: ACTION_CLASS_LIST_UPDATE });
+  }, []);
 
   const changeSelected = (
     event: React.ChangeEvent<{
@@ -49,23 +37,29 @@ const ClassesCombobox = (props: Props) => {
     }>,
     child: React.ReactNode
   ): void => {
+    let classes = [...classListState.classes];
     let selectedClass = classes?.find(
       (_class) => _class.name === event.target.value
     );
-    classStore.setSelected(selectedClass);
+    classSelectDispatch({
+      type: ACTION_CLASS_SELECT_UPDATE,
+      class: selectedClass,
+    });
   };
 
   return (
     <FormControl className={styles.formControl}>
-      <InputLabel htmlFor="grouped-select">Class</InputLabel>
+      <InputLabel htmlFor="class-select">Class</InputLabel>
       <Select
         defaultValue=""
         displayEmpty
-        id="grouped-select"
+        id="class-select"
+        data-testid="class-select"
         onChange={changeSelected}
-        value={selected}
+        value={classSelectState.class}
+        aria-label="class-select"
       >
-        {classes?.map((_class, index) => (
+        {classListState.classes?.map((_class, index) => (
           <MenuItem key={_class.name} value={_class.name}>
             {_class.name}
           </MenuItem>
