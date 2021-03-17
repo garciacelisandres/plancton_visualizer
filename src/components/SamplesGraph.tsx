@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   CartesianGrid,
   Line,
@@ -8,22 +8,18 @@ import {
   YAxis,
 } from "recharts";
 import { Sample } from "../model/Sample";
-import { Class } from "../model/Class";
-import sampleStore from "../stores/SampleStore";
-import classStore from "../stores/ClassStore";
 import { useClassSelect } from "../contexts/ClassSelectContext";
+import { useSampleList } from "../contexts/SampleListContext";
+import { ACTION_SAMPLE_LIST_UPDATE } from "../contexts/reducers/sampleList/SampleListActions";
 
 interface Props {}
 
 const SamplesGraph: React.FC<Props> = () => {
-  const [samples, setSamples] = useState<Sample[]>([]);
+  const { sampleListState, sampleListDispatch } = useSampleList();
   const { classSelectState } = useClassSelect();
 
   useEffect(() => {
-    sampleStore.attach(setSamples);
-    return function cleanup() {
-      sampleStore.dettach(setSamples);
-    };
+    sampleListDispatch({ type: ACTION_SAMPLE_LIST_UPDATE });
   }, []);
 
   return (
@@ -31,7 +27,7 @@ const SamplesGraph: React.FC<Props> = () => {
       <LineChart
         width={1000}
         height={300}
-        data={samples.map((sample) => sample.toJSON())}
+        data={sampleListState.samples.map((sample) => sample.toJSON())}
       >
         <XAxis
           dataKey="date"
@@ -51,7 +47,7 @@ const SamplesGraph: React.FC<Props> = () => {
             let value = sample.values.find(
               (obj) => obj["class_id"] === classSelectState.class?.id
             )?.value;
-            return value
+            return value;
           }}
           stroke="#8884d8"
         />

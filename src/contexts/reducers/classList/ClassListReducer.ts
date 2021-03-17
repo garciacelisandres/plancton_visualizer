@@ -6,7 +6,9 @@ export default (state: ClassListState, action: ClassListAction) => {
   switch (action.type) {
     case ACTION_CLASS_LIST_UPDATE: {
       ClassStore.updateState();
-      return { classes: ClassStore.getState() };
+      console.log(ClassStore.getState())
+      let newState = { classes: ClassStore.getState() };
+      return newState;
     }
 
     default: {

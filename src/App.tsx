@@ -1,11 +1,10 @@
-import React from "react";
 import "./App.css";
 
 import SamplesGraph from "./components/SamplesGraph";
 import ClassesCombobox from "./components/ClassesCombobox";
-import classStore from "./stores/ClassStore";
 import { ClassListProvider } from "./contexts/ClassListContext";
 import { ClassSelectProvider } from "./contexts/ClassSelectContext";
+import { SampleListProvider } from "./contexts/SampleListContext";
 
 function App() {
   return (
@@ -15,7 +14,9 @@ function App() {
         <ClassListProvider>
           <ClassesCombobox />
         </ClassListProvider>
-        <SamplesGraph />
+        <SampleListProvider>
+          <SamplesGraph />
+        </SampleListProvider>
       </ClassSelectProvider>
     </div>
   );
