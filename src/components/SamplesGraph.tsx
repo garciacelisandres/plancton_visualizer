@@ -10,7 +10,7 @@ import {
 import { Sample } from "../model/Sample";
 import { useClassSelect } from "../contexts/ClassSelectContext";
 import { useSampleList } from "../contexts/SampleListContext";
-import { ACTION_SAMPLE_LIST_UPDATE } from "../contexts/reducers/sampleList/SampleListActions";
+import { updateSampleList } from "../contexts/util/SampleListUtil";
 
 interface Props {}
 
@@ -19,7 +19,7 @@ const SamplesGraph: React.FC<Props> = () => {
   const { classSelectState } = useClassSelect();
 
   useEffect(() => {
-    sampleListDispatch({ type: ACTION_SAMPLE_LIST_UPDATE });
+    updateSampleList(sampleListDispatch);
   }, []);
 
   return (

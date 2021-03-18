@@ -11,11 +11,9 @@ class SampleStore {
     return this._state;
   }
 
-  updateState(): void {
-    server.getSamples().then((samples: Sample[]) => {
-      console.log(samples)
-      this._state = samples;
-    });
+  async updateState(): Promise<void> {
+    let samples = await server.getSamples()
+    this._state = samples;
   }
 }
 

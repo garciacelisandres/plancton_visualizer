@@ -3,11 +3,11 @@ import { SampleListAction } from "./reducers/sampleList/SampleListActions";
 import { SampleListState } from "./reducers/sampleList/SampleListState";
 import sampleReducer from "./reducers/sampleList/SampleListReducer";
 
-type Dispatch = (action: SampleListAction) => void;
+export type SampleListDispatch = (action: SampleListAction) => void;
 type SampleProviderProps = { children: React.ReactNode };
 
 const SampleListContext = React.createContext<
-  { sampleListState: SampleListState; sampleListDispatch: Dispatch } | undefined
+  { sampleListState: SampleListState; sampleListDispatch: SampleListDispatch } | undefined
 >(undefined);
 
 function SampleListProvider({ children }: SampleProviderProps) {

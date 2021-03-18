@@ -3,11 +3,11 @@ import { ClassSelectAction } from "./reducers/classSelect/ClassSelectActions";
 import { ClassSelectState } from "./reducers/classSelect/ClassSelectState";
 import classReducer from "./reducers/classSelect/ClassSelectReducer"
 
-type Dispatch = (action: ClassSelectAction) => void;
+export type ClassSelectDispatch = (action: ClassSelectAction) => void;
 type ClassProviderProps = { children: React.ReactNode };
 
 const ClassSelectContext = React.createContext<
-  { classSelectState: ClassSelectState; classSelectDispatch: Dispatch } | undefined
+  { classSelectState: ClassSelectState; classSelectDispatch: ClassSelectDispatch } | undefined
 >(undefined);
 
 function ClassSelectProvider({ children }: ClassProviderProps) {

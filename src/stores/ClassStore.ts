@@ -11,10 +11,9 @@ class ClassStore {
     return this._state;
   }
 
-  updateState(): void {
-    server.getClasses().then((classes: Class[]) => {
-      this._state = classes;
-    });
+  async updateState(): Promise<void> {
+    let classes = await server.getClasses();
+    this._state = classes;
   }
 }
 

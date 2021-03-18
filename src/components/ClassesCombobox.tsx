@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { useClassList } from "../contexts/ClassListContext";
-import { ACTION_CLASS_LIST_UPDATE } from "../contexts/reducers/classList/ClassListActions";
 import { useClassSelect } from "../contexts/ClassSelectContext";
 import { ACTION_CLASS_SELECT_UPDATE } from "../contexts/reducers/classSelect/ClassSelectActions";
+import { updateClassList } from "../contexts/util/ClassListUtil";
 
 interface Props {}
 
@@ -27,7 +27,7 @@ const ClassesCombobox = (props: Props) => {
   const styles = useStyles();
 
   useEffect(() => {
-    classListDispatch({ type: ACTION_CLASS_LIST_UPDATE });
+    updateClassList(classListDispatch, classSelectDispatch);
   }, []);
 
   const changeSelected = (
@@ -51,7 +51,7 @@ const ClassesCombobox = (props: Props) => {
     <FormControl className={styles.formControl}>
       <InputLabel htmlFor="class-select">Class</InputLabel>
       <Select
-        defaultValue=""
+        defaultValue={classSelectState.class}
         displayEmpty
         id="class-select"
         data-testid="class-select"
