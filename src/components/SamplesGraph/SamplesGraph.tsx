@@ -17,7 +17,7 @@ interface Props {
   width: number;
 }
 
-const SamplesGraph: React.FC<Props> = ({height, width}) => {
+const SamplesGraph: React.FC<Props> = ({ height, width }) => {
   const { sampleListState, sampleListDispatch } = useSampleList();
   const { classSelectState } = useClassSelect();
 
@@ -44,16 +44,19 @@ const SamplesGraph: React.FC<Props> = ({height, width}) => {
         />
         <YAxis />
         <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-        <Line
-          type="monotone"
-          dataKey={(sample: Sample) => {
-            let value = sample.values.find(
-              (obj) => obj["class_id"] === classSelectState.class?.id
-            )?.value;
-            return value;
-          }}
-          stroke="#8884d8"
-        />
+        {classSelectState.classes?.map((_class) => (
+          <Line
+            type="monotone"
+            dataKey={(sample: Sample) => {
+              let value = sample.values.find(
+                (obj) => obj["class_id"] === _class.id
+              )?.value;
+              return value;
+            }}
+            stroke="#8884d8"
+            key={_class.name}
+          />
+        ))}
         <Tooltip />
       </LineChart>
     </div>

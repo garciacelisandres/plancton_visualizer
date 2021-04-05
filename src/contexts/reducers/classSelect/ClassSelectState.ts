@@ -1,3 +1,3 @@
 import { Class } from "../../../model/Class";
 
-export type ClassSelectState = { class: Class | undefined };
+export type ClassSelectState = { classes: Class[] | undefined };

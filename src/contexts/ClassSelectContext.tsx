@@ -11,7 +11,7 @@ const ClassSelectContext = React.createContext<
 >(undefined);
 
 function ClassSelectProvider({ children }: ClassProviderProps) {
-  const [classSelectState, classSelectDispatch] = React.useReducer(classReducer, { class: undefined });
+  const [classSelectState, classSelectDispatch] = React.useReducer(classReducer, { classes: undefined });
   const value = { classSelectState, classSelectDispatch };
   return (
     <ClassSelectContext.Provider value={value}>

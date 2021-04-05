@@ -58,7 +58,7 @@ const ClassesList = ({ height, width }: Props) => {
           classListState.classes.map((_class, index) => (
             <ListItem
               button
-              selected={_class.name === classSelectState.class?.name}
+              selected={classSelectState.classes?.map(_ => _.name).includes(_class.name)}
               onClick={(event) => handleListItemClick(event, index)}
               key={index}
             >
