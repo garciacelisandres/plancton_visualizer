@@ -7,14 +7,17 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Sample } from "../model/Sample";
-import { useClassSelect } from "../contexts/ClassSelectContext";
-import { useSampleList } from "../contexts/SampleListContext";
-import { updateSampleList } from "../contexts/util/SampleListUtil";
+import { Sample } from "../../model/Sample";
+import { useClassSelect } from "../../contexts/ClassSelectContext";
+import { useSampleList } from "../../contexts/SampleListContext";
+import { updateSampleList } from "../../contexts/util/SampleListUtil";
 
-interface Props {}
+interface Props {
+  height: number;
+  width: number;
+}
 
-const SamplesGraph: React.FC<Props> = () => {
+const SamplesGraph: React.FC<Props> = ({height, width}) => {
   const { sampleListState, sampleListDispatch } = useSampleList();
   const { classSelectState } = useClassSelect();
 
@@ -25,8 +28,8 @@ const SamplesGraph: React.FC<Props> = () => {
   return (
     <div>
       <LineChart
-        width={1000}
-        height={300}
+        width={width}
+        height={height}
         data={sampleListState.samples.map((sample) => sample.toJSON())}
       >
         <XAxis
