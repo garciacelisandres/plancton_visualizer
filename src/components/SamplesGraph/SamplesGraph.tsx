@@ -10,7 +10,6 @@ import {
 import { Sample } from "../../model/Sample";
 import { useClassSelect } from "../../contexts/ClassSelectContext";
 import { useSampleList } from "../../contexts/SampleListContext";
-import { updateSampleList } from "../../contexts/util/SampleListUtil";
 
 interface Props {
   height: number;
@@ -18,12 +17,8 @@ interface Props {
 }
 
 const SamplesGraph: React.FC<Props> = ({ height, width }) => {
-  const { sampleListState, sampleListDispatch } = useSampleList();
+  const { sampleListState } = useSampleList();
   const { classSelectState } = useClassSelect();
-
-  useEffect(() => {
-    updateSampleList(sampleListDispatch);
-  }, []);
 
   return (
     <div>
@@ -44,19 +39,23 @@ const SamplesGraph: React.FC<Props> = ({ height, width }) => {
         />
         <YAxis />
         <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-        {classSelectState.classes?.map((_class) => (
-          <Line
-            type="monotone"
-            dataKey={(sample: Sample) => {
-              let value = sample.values.find(
-                (obj) => obj["class_id"] === _class.id
-              )?.value;
-              return value;
-            }}
-            stroke="#8884d8"
-            key={_class.name}
-          />
-        ))}
+        {classSelectState.classes?.map((_class) =>
+          _class ? (
+            <Line
+              type="monotone"
+              dataKey={(sample: Sample) => {
+                let value = sample.values.find(
+                  (obj) => obj["class_id"] === _class.id
+                )?.value;
+                return value;
+              }}
+              stroke="#8884d8"
+              key={_class.name}
+            />
+          ) : (
+            <></>
+          )
+        )}
         <Tooltip />
       </LineChart>
     </div>

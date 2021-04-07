@@ -11,8 +11,8 @@ class ServerCall {
   ): Promise<Sample[]> {
     var url = "http://localhost:5000/api/v0.1/samples";
     var params: string[] = [];
-    if (start_time) params.push(`start_time=${start_time.getTime() / 1000}`);
-    if (end_time) params.push(`end_time=${end_time.getTime() / 1000}`);
+    if (start_time) params.push(`start_time=${Math.floor(start_time.getTime() / 1000)}`);
+    if (end_time) params.push(`end_time=${Math.ceil(end_time.getTime() / 1000)}`);
     if (sample_classes && sample_classes.length > 0) {
       let sample_classes_param = "";
       sample_classes.forEach((sample_class, index) => {
@@ -26,6 +26,7 @@ class ServerCall {
       });
       params.push(sample_classes_param);
     }
+    if(quant_method) params.push(`quant_method=${quant_method}`)
     params.forEach((param, index) => {
       if (index === 0) url += `?${param}&`;
       else if (index === params.length - 1) url += `${param}`;

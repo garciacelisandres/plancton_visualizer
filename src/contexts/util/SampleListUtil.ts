@@ -1,3 +1,4 @@
+import { Class } from "../../model/Class";
 import SampleStore from "../../stores/SampleStore";
 import {
   ACTION_SAMPLE_LIST_UPDATE_ERROR,
@@ -6,10 +7,25 @@ import {
 } from "../reducers/sampleList/SampleListActions";
 import { SampleListDispatch } from "../SampleListContext";
 
-export async function updateSampleList(dispatch: SampleListDispatch) {
+interface UpdateSampleListParams {
+  start_time?: Date | undefined;
+  end_time?: Date | undefined;
+  sample_classes?: Class[] | undefined;
+  quant_method?: undefined;
+}
+
+export async function updateSampleList(
+  dispatch: SampleListDispatch,
+  { start_time, end_time, sample_classes, quant_method }: UpdateSampleListParams
+) {
   dispatch({ type: ACTION_SAMPLE_LIST_UPDATE_START, params: {} });
   try {
-    await SampleStore.updateState();
+    await SampleStore.updateState(
+      start_time,
+      end_time,
+      sample_classes,
+      quant_method
+    );
     let sampleList = SampleStore.getState();
     dispatch({
       type: ACTION_SAMPLE_LIST_UPDATE_FINISH,
