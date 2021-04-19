@@ -1,8 +1,17 @@
 import React, { useEffect } from "react";
-import { List, ListItem, ListItemText, makeStyles } from "@material-ui/core";
+import {
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  makeStyles,
+} from "@material-ui/core";
 import { useClassList } from "../../contexts/ClassListContext";
 import { useClassSelect } from "../../contexts/ClassSelectContext";
-import { ACTION_CLASS_SELECT_UPDATE } from "../../contexts/reducers/classSelect/ClassSelectActions";
+import {
+  ACTION_CLASS_SELECT_DELETE,
+  ACTION_CLASS_SELECT_UPDATE,
+} from "../../contexts/reducers/classSelect/ClassSelectActions";
 import { updateClassList } from "../../contexts/util/ClassListUtil";
 
 interface Props {
@@ -51,6 +60,16 @@ const ClassesList = ({ height, width }: Props) => {
     });
   };
 
+  const handleDeleteSelection = () => {
+    let anyClass = classListState.classes.pop();
+    if (anyClass) {
+      classSelectDispatch({
+        type: ACTION_CLASS_SELECT_DELETE,
+        class: anyClass,
+      });
+    }
+  };
+
   return (
     <div>
       <List className={classes.root} component="nav" aria-label="classlist">
@@ -58,7 +77,9 @@ const ClassesList = ({ height, width }: Props) => {
           classListState.classes.map((_class, index) => (
             <ListItem
               button
-              selected={classSelectState.classes?.map(_ => _.name).includes(_class.name)}
+              selected={classSelectState.classes
+                ?.map((_) => _.name)
+                .includes(_class.name)}
               onClick={(event) => handleListItemClick(event, index)}
               key={index}
             >
@@ -71,6 +92,7 @@ const ClassesList = ({ height, width }: Props) => {
           </ListItem>
         )}
       </List>
+      <Button onClick={handleDeleteSelection}>Delete selection</Button>
     </div>
   );
 };

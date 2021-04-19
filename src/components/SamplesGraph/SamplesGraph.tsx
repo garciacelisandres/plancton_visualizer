@@ -1,15 +1,11 @@
-import React, { useEffect } from "react";
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import { Sample } from "../../model/Sample";
+import React from "react";
 import { useClassSelect } from "../../contexts/ClassSelectContext";
 import { useSampleList } from "../../contexts/SampleListContext";
+import { useGraphType } from "../../contexts/GraphTypeContext";
+import LineGraphType from "./graphs/LineGraphType";
+import BarGraphType from "./graphs/BarGraphType";
+import PieGraphType from "./graphs/PieGraphType";
+import { ResponsiveContainer } from "recharts";
 
 interface Props {
   height: number;
@@ -19,46 +15,35 @@ interface Props {
 const SamplesGraph: React.FC<Props> = ({ height, width }) => {
   const { sampleListState } = useSampleList();
   const { classSelectState } = useClassSelect();
+  const { graphTypeState } = useGraphType();
+
+  const renderGraph = (): JSX.Element => {
+    switch (graphTypeState.name) {
+      case "bar":
+        return (
+          <BarGraphType
+            sampleListState={sampleListState}
+            classSelectState={classSelectState}
+            width={width}
+            height={height}
+          />
+        );
+      case "line":
+        return (
+          <LineGraphType
+            sampleListState={sampleListState}
+            classSelectState={classSelectState}
+            width={width}
+            height={height}
+          />
+        );
+    }
+  };
 
   return (
-    <div>
-      <LineChart
-        width={width}
-        height={height}
-        data={sampleListState.samples.map((sample) => sample.toJSON())}
-      >
-        <XAxis
-          dataKey="date"
-          tick={({ x, y, payload }) => {
-            return (
-              <text x={x - 60} y={y + 20}>
-                {payload.value}
-              </text>
-            );
-          }}
-        />
-        <YAxis />
-        <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-        {classSelectState.classes?.map((_class) =>
-          _class ? (
-            <Line
-              type="monotone"
-              dataKey={(sample: Sample) => {
-                let value = sample.values.find(
-                  (obj) => obj["class_id"] === _class.id
-                )?.value;
-                return value;
-              }}
-              stroke="#8884d8"
-              key={_class.name}
-            />
-          ) : (
-            <></>
-          )
-        )}
-        <Tooltip />
-      </LineChart>
-    </div>
+    <ResponsiveContainer width="100%" height="100%">
+      {renderGraph()}
+    </ResponsiveContainer>
   );
 };
 

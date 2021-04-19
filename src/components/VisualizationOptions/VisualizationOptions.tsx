@@ -1,7 +1,7 @@
 import "react-datepicker/dist/react-datepicker.css";
 
 import IconButton from "@material-ui/core/IconButton";
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import RadioButtonChecked from "@material-ui/icons/RadioButtonChecked";
 import RadioButtonUnchecked from "@material-ui/icons/RadioButtonUnchecked";
@@ -16,13 +16,27 @@ interface Props {
 const VisualizationOptions = ({ height, width }: Props) => {
   const { sampleListDispatch } = useSampleList();
 
-  const [startTime, setStartTime] = useState<Date | undefined>(new Date());
+  const [startTime, setStartTime] = useState<Date | undefined>(() => {
+    let previousMonth = new Date();
+    let currentDay = previousMonth.getDate();
+    previousMonth.setDate(0);
+    previousMonth.setDate(1);
+    previousMonth.setDate(currentDay)
+    return previousMonth;
+  });
   const [endTime, setEndTime] = useState<Date | undefined>(new Date());
   const [constantRetrieval, setConstantRetrieval] = useState<boolean>(false);
 
+  useEffect(() => {
+    updateSampleList(sampleListDispatch, {
+      start_time: startTime,
+      end_time: endTime,
+    });
+  }, [])
+
   const handleStartTimeChange = (
     date: Date | null,
-    event: SyntheticEvent<any, Event> | undefined
+    _event: SyntheticEvent<any, Event> | undefined
   ) => {
     if (date) {
       if (endTime && date > endTime) {
@@ -43,7 +57,7 @@ const VisualizationOptions = ({ height, width }: Props) => {
 
   const handleEndTimeChange = (
     date: Date | null,
-    event: SyntheticEvent<any, Event> | undefined
+    _event: SyntheticEvent<any, Event> | undefined
   ) => {
     if (date) {
       if (startTime && date < startTime) {
