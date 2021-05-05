@@ -4,15 +4,16 @@ import { useSampleList } from "../../contexts/SampleListContext";
 import { useGraphType } from "../../contexts/GraphTypeContext";
 import LineGraphType from "./graphs/LineGraphType";
 import BarGraphType from "./graphs/BarGraphType";
-import PieGraphType from "./graphs/PieGraphType";
 import { ResponsiveContainer } from "recharts";
+import { Sample } from "../../model/Sample";
 
 interface Props {
   height: number;
   width: number;
+  handleClickOpen: (sample: Sample) => void;
 }
 
-const SamplesGraph: React.FC<Props> = ({ height, width }) => {
+const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
   const { sampleListState } = useSampleList();
   const { classSelectState } = useClassSelect();
   const { graphTypeState } = useGraphType();
@@ -26,6 +27,7 @@ const SamplesGraph: React.FC<Props> = ({ height, width }) => {
             classSelectState={classSelectState}
             width={width}
             height={height}
+            handleClickOpen={handleClickOpen}
           />
         );
       case "line":
@@ -35,15 +37,22 @@ const SamplesGraph: React.FC<Props> = ({ height, width }) => {
             classSelectState={classSelectState}
             width={width}
             height={height}
+            handleClickOpen={handleClickOpen}
           />
         );
     }
   };
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      {renderGraph()}
-    </ResponsiveContainer>
+    <>
+      {classSelectState.classes && sampleListState.samples?.length > 0 ? (
+        <ResponsiveContainer width="100%" height="100%">
+          {renderGraph()}
+        </ResponsiveContainer>
+      ) : (
+        <p>No data</p>
+      )}
+    </>
   );
 };
 

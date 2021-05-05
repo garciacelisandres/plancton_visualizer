@@ -5,12 +5,28 @@ import ClassesList from "../ClassesList/ClassesList";
 import SamplesGraph from "../SamplesGraph/SamplesGraph";
 import VisualizationOptions from "../VisualizationOptions/VisualizationOptions";
 import GraphTypes from "../GraphTypes/GraphTypes";
-import React from "react";
 import { GraphTypeProvider } from "../../contexts/GraphTypeContext";
+import React from "react";
+import SampleModalDialog from "../SampleModalDialog/SampleModalDialog";
+import { Sample } from "../../model/Sample";
 
 const ReactGridLayout = WidthProvider(RGL);
 
 const GridLayout = () => {
+  const [open, setOpen] = React.useState(false);
+  const [selectedSample, setSelectedSample] = React.useState<
+    Sample | undefined
+  >(undefined);
+
+  const handleClickOpen = (sample: Sample) => {
+    setSelectedSample(sample);
+    if (sample) setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const rowHeight = 50;
   const rowWidth = 50;
   const layout = [
@@ -60,7 +76,11 @@ const GridLayout = () => {
             <ClassesList height={rowHeight * 6} width={rowWidth * 6} />
           </div>
           <div key="graph">
-            <SamplesGraph height={rowHeight * 6} width={rowWidth * 18} />
+            <SamplesGraph
+              height={rowHeight * 6}
+              width={rowWidth * 18}
+              handleClickOpen={handleClickOpen}
+            />
           </div>
           <div key="graph-types">
             <GraphTypes />
@@ -70,6 +90,11 @@ const GridLayout = () => {
           </div>
         </ReactGridLayout>
       </GraphTypeProvider>
+      <SampleModalDialog
+        open={open}
+        onClose={handleClose}
+        sampleData={selectedSample}
+      />
     </div>
   );
 };

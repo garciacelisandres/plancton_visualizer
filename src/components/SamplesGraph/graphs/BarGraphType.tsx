@@ -18,6 +18,7 @@ interface Props {
   classSelectState: ClassSelectState;
   width: number;
   height: number;
+  handleClickOpen: (sample: Sample) => void;
 }
 
 const BarGraphType: React.FC<Props> = ({
@@ -25,6 +26,7 @@ const BarGraphType: React.FC<Props> = ({
   classSelectState,
   width,
   height,
+  handleClickOpen,
 }) => {
   const palette = [
     "#d36135",
@@ -69,6 +71,7 @@ const BarGraphType: React.FC<Props> = ({
               stackId="a"
               fill={palette[index % palette.length]}
               key={_class.name}
+              onClick={handleClickOpen}
             />
           ) : (
             <></>

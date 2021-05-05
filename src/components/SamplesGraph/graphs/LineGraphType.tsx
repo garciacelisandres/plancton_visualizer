@@ -3,7 +3,6 @@ import {
   CartesianGrid,
   Line,
   LineChart,
-  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -17,6 +16,7 @@ interface Props {
   classSelectState: ClassSelectState;
   width: number;
   height: number;
+  handleClickOpen: (sample: Sample) => void;
 }
 
 const LineGraphType: React.FC<Props> = ({
@@ -24,6 +24,7 @@ const LineGraphType: React.FC<Props> = ({
   classSelectState,
   width,
   height,
+  handleClickOpen,
 }) => {
   return (
     <LineChart
@@ -32,7 +33,7 @@ const LineGraphType: React.FC<Props> = ({
       data={sampleListState.samples.map((sample) => sample.toJSON())}
     >
       <XAxis
-        dataKey="date"
+        dataKey="date.toDateString()"
         tick={({ x, y, payload }) => {
           return (
             <text x={x - 60} y={y + 20}>
@@ -55,6 +56,15 @@ const LineGraphType: React.FC<Props> = ({
             }}
             stroke="#8884d8"
             key={_class.name}
+            activeDot={{
+              onClick: (event, data) => {
+                let dataWithPayload = data as any;
+                let payload = dataWithPayload.payload;
+                let sample = payload as Sample;
+                console.log(sample)
+                handleClickOpen(sample);
+              },
+            }}
           />
         ) : (
           <></>

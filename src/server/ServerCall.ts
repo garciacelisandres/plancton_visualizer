@@ -46,8 +46,14 @@ class ServerCall {
         samples_response.forEach((sample: any) => {
           let sample_id: string = sample["_id"];
           let sample_name: string = sample["name"];
-          let sample_date: Date = new Date(sample["date_retrieved"] * 1000);
+          let sample_date: Date = new Date(Math.floor(sample["date_retrieved"]) * 1000);
           let sample_values: any[] = sample["sample_classes"];
+          sample_values = sample_values.map((value) => {
+            return {
+              class_id: value.class_id,
+              value: value.values[0].value
+            }
+          })
           samples_list.push(
             new Sample(sample_id, sample_name, sample_date, sample_values)
           );

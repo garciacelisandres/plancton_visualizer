@@ -21,7 +21,7 @@ const VisualizationOptions = ({ height, width }: Props) => {
     let currentDay = previousMonth.getDate();
     previousMonth.setDate(0);
     previousMonth.setDate(1);
-    previousMonth.setDate(currentDay)
+    previousMonth.setDate(currentDay);
     return previousMonth;
   });
   const [endTime, setEndTime] = useState<Date | undefined>(new Date());
@@ -32,7 +32,7 @@ const VisualizationOptions = ({ height, width }: Props) => {
       start_time: startTime,
       end_time: endTime,
     });
-  }, [])
+  }, []);
 
   const handleStartTimeChange = (
     date: Date | null,
@@ -86,8 +86,20 @@ const VisualizationOptions = ({ height, width }: Props) => {
         onChange={handleStartTimeChange}
         selected={startTime}
         dropdownMode="scroll"
+        showTimeSelect
+        timeFormat="HH:mm"
+        timeIntervals={15}
+        dateFormat="dd/MM/yyyy, HH:mm"
       />
-      <DatePicker onChange={handleEndTimeChange} selected={endTime} />
+      <DatePicker
+        onChange={handleEndTimeChange}
+        selected={endTime}
+        dropdownMode="scroll"
+        showTimeSelect
+        timeFormat="HH:mm"
+        timeIntervals={15}
+        dateFormat="dd/MM/yyyy, HH:mm"
+      />
       <IconButton onClick={handleConstantRetrievalChange}>
         {constantRetrieval ? <RadioButtonChecked /> : <RadioButtonUnchecked />}
       </IconButton>

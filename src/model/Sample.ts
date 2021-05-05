@@ -20,7 +20,7 @@ export class Sample {
     return {
       id: this.id,
       name: this.name,
-      date: this.date.toDateString(),
+      date: this.date,
       values: this.values,
     };
   }
