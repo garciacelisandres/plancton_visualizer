@@ -1,6 +1,9 @@
 export type Value = {
   class_id: string;
-  value: number;
+  values: {
+    method: string;
+    value: number;
+  }[];
 };
 
 export class Sample {

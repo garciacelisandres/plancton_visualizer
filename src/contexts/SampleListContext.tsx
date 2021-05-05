@@ -7,13 +7,14 @@ export type SampleListDispatch = (action: SampleListAction) => void;
 type SampleProviderProps = { children: React.ReactNode };
 
 const SampleListContext = React.createContext<
-  { sampleListState: SampleListState; sampleListDispatch: SampleListDispatch } | undefined
+  | { sampleListState: SampleListState; sampleListDispatch: SampleListDispatch }
+  | undefined
 >(undefined);
 
 function SampleListProvider({ children }: SampleProviderProps) {
   const [sampleListState, sampleListDispatch] = React.useReducer(
     sampleReducer,
-    { samples: [] }
+    { samples: [], method: "" }
   );
   const value = { sampleListState, sampleListDispatch };
   return (

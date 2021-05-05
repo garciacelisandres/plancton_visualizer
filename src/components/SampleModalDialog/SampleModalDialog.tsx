@@ -2,7 +2,9 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
-import React from "react";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import React, { useState } from "react";
 import { Sample } from "../../model/Sample";
 import PieGraphType from "../SamplesGraph/graphs/PieGraphType";
 
@@ -13,7 +15,20 @@ interface Props {
 }
 
 const SampleModalDialog: React.FC<Props> = ({ open, onClose, sampleData }) => {
-  console.log(sampleData)
+  const [selectedQuantMethod, setSelectedQuantMethod] = useState<string>(
+    sampleData ? sampleData.values[0].values[0].method : ""
+  );
+
+  const selectQuantMethod = (
+    event: React.ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) => {
+    let method: string = event.target.value as string;
+    setSelectedQuantMethod(method);
+  };
+
   return (
     <>
       {sampleData && (
@@ -30,15 +45,38 @@ const SampleModalDialog: React.FC<Props> = ({ open, onClose, sampleData }) => {
               spacing={3}
             >
               <Grid item xs={6}>
-                <p>Sample name: {sampleData.name}</p>
-                <p>
-                  Date retrieved:{" "}
-                  {new Date(sampleData.date).toLocaleDateString()},{" "}
-                  {new Date(sampleData.date.toISOString()).toTimeString()}
-                </p>
+                <Grid
+                  container
+                  direction="column"
+                  justify="center"
+                  alignItems="center"
+                  spacing={3}
+                >
+                  <Grid>
+                    <p>Sample name: {sampleData.name}</p>
+                    <p>
+                      Date retrieved:{" "}
+                      {new Date(sampleData.date).toLocaleDateString()},{" "}
+                      {new Date(sampleData.date.toISOString()).toTimeString()}
+                    </p>
+                  </Grid>
+                  <Grid>
+                    <Select
+                      native
+                      labelId="quant-method-select-label"
+                      id="quant-method-select-select"
+                      value={selectedQuantMethod}
+                      onChange={selectQuantMethod}
+                    >
+                      {sampleData.values[0].values.map((value) => (
+                        <option value={value.method}>{value.method}</option>
+                      ))}
+                    </Select>
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item xs={6}>
-                <PieGraphType sampleData={sampleData} />
+                <PieGraphType sampleData={sampleData} selectedQuantMethod={selectedQuantMethod} />
               </Grid>
             </Grid>
           </DialogContent>

@@ -63,9 +63,11 @@ const BarGraphType: React.FC<Props> = ({
           _class ? (
             <Bar
               dataKey={(sample: Sample) => {
-                let value = sample.values.find(
-                  (obj) => obj["class_id"] === _class.id
-                )?.value;
+                let value = sample.values
+                  .find((obj) => obj["class_id"] === _class.id)
+                  ?.values.find(
+                    (value) => value.method === sampleListState.method
+                  )?.value;
                 return value;
               }}
               stackId="a"

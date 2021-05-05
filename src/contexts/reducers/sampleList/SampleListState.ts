@@ -2,6 +2,7 @@ import { Sample } from "../../../model/Sample";
 
 export interface SampleListState {
   samples: Sample[];
+  method: string;
 }
 
 export interface SampleListLoadingState extends SampleListState {}

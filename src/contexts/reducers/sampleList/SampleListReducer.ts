@@ -15,18 +15,23 @@ import {
 export default (state: SampleListState, action: SampleListAction) => {
   switch (action.type) {
     case ACTION_SAMPLE_LIST_UPDATE_START: {
-      let newState: SampleListLoadingState = { samples: state.samples };
+      let newState: SampleListLoadingState = {
+        samples: state.samples,
+        method: state.method,
+      };
       return newState;
     }
     case ACTION_SAMPLE_LIST_UPDATE_FINISH: {
       let newState: SampleListSuccessState = {
         samples: action.params.samples,
+        method: action.params.method,
       };
       return newState;
     }
     case ACTION_SAMPLE_LIST_UPDATE_ERROR: {
       let newState: SampleListErrorState = {
         samples: state.samples,
+        method: state.method,
         error: action.params.error,
       };
       return newState;

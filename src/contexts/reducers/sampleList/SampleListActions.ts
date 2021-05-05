@@ -22,6 +22,7 @@ export interface SampleListFinishUpdateAction {
   type: typeof ACTION_SAMPLE_LIST_UPDATE_FINISH;
   params: {
     samples: Sample[];
+    method: string;
   };
 }
 

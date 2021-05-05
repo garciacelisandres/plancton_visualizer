@@ -27,9 +27,14 @@ export async function updateSampleList(
       quant_method
     );
     let sampleList = SampleStore.getState();
+    console.log(sampleList)
+    console.log(sampleList[0].values[0].values[0].method)
     dispatch({
       type: ACTION_SAMPLE_LIST_UPDATE_FINISH,
-      params: { samples: sampleList },
+      params: {
+        samples: sampleList,
+        method: sampleList[0].values[0].values[0].method,
+      },
     });
   } catch (e) {
     dispatch({ type: ACTION_SAMPLE_LIST_UPDATE_ERROR, params: { error: e } });

@@ -49,9 +49,11 @@ const LineGraphType: React.FC<Props> = ({
           <Line
             type="monotone"
             dataKey={(sample: Sample) => {
-              let value = sample.values.find(
-                (obj) => obj["class_id"] === _class.id
-              )?.value;
+              let value = sample.values
+                .find((obj) => obj["class_id"] === _class.id)
+                ?.values.find(
+                  (value) => value.method === sampleListState.method
+                )?.value;
               return value;
             }}
             stroke="#8884d8"
@@ -61,7 +63,6 @@ const LineGraphType: React.FC<Props> = ({
                 let dataWithPayload = data as any;
                 let payload = dataWithPayload.payload;
                 let sample = payload as Sample;
-                console.log(sample)
                 handleClickOpen(sample);
               },
             }}

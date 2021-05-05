@@ -4,6 +4,7 @@ import { Sample } from "../../../model/Sample";
 
 interface Props {
   sampleData: Sample;
+  selectedQuantMethod: string;
 }
 
 const palette = [
@@ -19,11 +20,13 @@ const palette = [
   "#b26700",
 ];
 
-const PieGraphType: React.FC<Props> = ({ sampleData }) => {
+const PieGraphType: React.FC<Props> = ({ sampleData, selectedQuantMethod }) => {
   return (
     <PieChart width={300} height={300}>
       <Pie
-        data={sampleData.values}
+        data={sampleData.values.map(value => {
+          return value.values
+        }).map(values => values.find(value => value.method === selectedQuantMethod))}
         cx="50%"
         cy="50%"
         isAnimationActive={false}
@@ -31,7 +34,7 @@ const PieGraphType: React.FC<Props> = ({ sampleData }) => {
         fill="#8884d8"
         dataKey="value"
       >
-        {sampleData.values.map((entry, index) => (
+        {sampleData.values.map(value => value.values).map((entry, index) => (
           <Cell key={`cell-${index}`} fill={palette[index % palette.length]} />
         ))}
       </Pie>

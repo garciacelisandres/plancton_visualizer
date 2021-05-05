@@ -27,8 +27,9 @@ const GraphTypes = () => {
   return (
     <div>
       <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
+        native
+        labelId="graph-types-select-label"
+        id="graph-types-select"
         value={graphTypeState.name}
         onChange={selectGraphType}
         className="capitalize"
@@ -37,7 +38,7 @@ const GraphTypes = () => {
           .map((_key, index) => TypesList[index])
           .filter((value) => typeof value === "string")
           .map((graphType) => (
-            <MenuItem value={graphType} className="capitalize">{graphType.toString()}</MenuItem>
+            <option value={graphType} className="capitalize">{graphType.toString()}</option>
           ))}
       </Select>
     </div>
