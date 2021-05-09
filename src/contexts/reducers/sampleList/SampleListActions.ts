@@ -10,12 +10,7 @@ export const ACTION_SAMPLE_LIST_UPDATE_ERROR =
 
 export interface SampleListStartUpdateAction {
   type: typeof ACTION_SAMPLE_LIST_UPDATE_START;
-  params: {
-    start_time?: Date | undefined;
-    end_time?: Date | undefined;
-    sample_classes?: Class[] | undefined;
-    quant_method?: undefined;
-  };
+  params: {};
 }
 
 export interface SampleListFinishUpdateAction {

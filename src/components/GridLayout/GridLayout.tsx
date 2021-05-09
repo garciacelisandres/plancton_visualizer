@@ -9,6 +9,7 @@ import { GraphTypeProvider } from "../../contexts/GraphTypeContext";
 import React from "react";
 import SampleModalDialog from "../SampleModalDialog/SampleModalDialog";
 import { Sample } from "../../model/Sample";
+import { RequestProgressProvider } from "../../contexts/RequestProgressContext";
 
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -63,32 +64,37 @@ const GridLayout = () => {
   return (
     <div>
       <GraphTypeProvider>
-        <ReactGridLayout
-          layout={layout}
-          onLayoutChange={() => {}}
-          className="layout"
-          rowHeight={50}
-          cols={12}
-          isDraggable={false}
-          isResizable={false}
-        >
-          <div key="class-list" className="react-grid-item item">
-            <ClassesList height={rowHeight * 6} width={rowWidth * 6} />
-          </div>
-          <div key="graph">
-            <SamplesGraph
-              height={rowHeight * 6}
-              width={rowWidth * 18}
-              handleClickOpen={handleClickOpen}
-            />
-          </div>
-          <div key="graph-types">
-            <GraphTypes />
-          </div>
-          <div key="vis-options">
-            <VisualizationOptions height={rowHeight * 6} width={rowWidth * 6} />
-          </div>
-        </ReactGridLayout>
+        <RequestProgressProvider>
+          <ReactGridLayout
+            layout={layout}
+            onLayoutChange={() => {}}
+            className="layout"
+            rowHeight={50}
+            cols={12}
+            isDraggable={false}
+            isResizable={false}
+          >
+            <div key="class-list" className="react-grid-item item">
+              <ClassesList height={rowHeight * 6} width={rowWidth * 6} />
+            </div>
+            <div key="graph">
+              <SamplesGraph
+                height={rowHeight * 6}
+                width={rowWidth * 18}
+                handleClickOpen={handleClickOpen}
+              />
+            </div>
+            <div key="graph-types">
+              <GraphTypes />
+            </div>
+            <div key="vis-options">
+              <VisualizationOptions
+                height={rowHeight * 6}
+                width={rowWidth * 6}
+              />
+            </div>
+          </ReactGridLayout>
+        </RequestProgressProvider>
       </GraphTypeProvider>
       <SampleModalDialog
         open={open}

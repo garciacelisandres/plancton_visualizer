@@ -1,13 +1,15 @@
 import axios from "axios";
 import { Sample } from "../model/Sample";
 import { Class } from "../model/Class";
+import { ACTION_REQUEST_PROGRESS_UPDATE } from "../contexts/reducers/requestProgress/RequestProgressActions";
 
 class ServerCall {
   async getSamples(
     start_time: Date | undefined = undefined,
     end_time: Date | undefined = undefined,
     sample_classes: Class[] | undefined = undefined,
-    quant_method: undefined = undefined
+    quant_method: undefined = undefined,
+    progressDispatch: Function | undefined = undefined
   ): Promise<Sample[]> {
     var url = "http://localhost:5000/api/v0.1/samples";
     var params: string[] = [];
@@ -34,12 +36,29 @@ class ServerCall {
       else if (index === params.length - 1) url += `${param}`;
       else url += `${param}&`;
     });
+    if (progressDispatch)
+      progressDispatch({
+        type: ACTION_REQUEST_PROGRESS_UPDATE,
+        params: { value: 0 },
+      });
     let retrieved = await axios({
       method: "GET",
       url: url,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
+      },
+      onDownloadProgress: (progressEvent: ProgressEvent) => {
+        let percentCompleted = Math.floor(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        if (progressDispatch) {
+          console.log(percentCompleted);
+          progressDispatch({
+            type: ACTION_REQUEST_PROGRESS_UPDATE,
+            params: { value: percentCompleted },
+          });
+        }
       },
     })
       .then((data) => {
@@ -69,7 +88,6 @@ class ServerCall {
             new Sample(sample_id, sample_name, sample_date, sample_values)
           );
         });
-        console.log(samples_list)
         return samples_list;
       })
       .catch((err) => {

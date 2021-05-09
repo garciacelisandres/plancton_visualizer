@@ -7,13 +7,14 @@ import RadioButtonChecked from "@material-ui/icons/RadioButtonChecked";
 import RadioButtonUnchecked from "@material-ui/icons/RadioButtonUnchecked";
 import { updateSampleList } from "../../contexts/util/SampleListUtil";
 import { useSampleList } from "../../contexts/SampleListContext";
+import { useRequestProgress } from "../../contexts/RequestProgressContext";
 
 interface Props {
   height: number;
   width: number;
 }
 
-const VisualizationOptions = ({ height, width }: Props) => {
+const VisualizationOptions: React.FC<Props> = ({ height, width }: Props) => {
   const { sampleListDispatch } = useSampleList();
 
   const [startTime, setStartTime] = useState<Date | undefined>(() => {
@@ -26,9 +27,10 @@ const VisualizationOptions = ({ height, width }: Props) => {
   });
   const [endTime, setEndTime] = useState<Date | undefined>(new Date());
   const [constantRetrieval, setConstantRetrieval] = useState<boolean>(false);
+  const { requestProgressDispatch } = useRequestProgress();
 
   useEffect(() => {
-    updateSampleList(sampleListDispatch, {
+    updateSampleList(sampleListDispatch, requestProgressDispatch, {
       start_time: startTime,
       end_time: endTime,
     });
@@ -41,13 +43,13 @@ const VisualizationOptions = ({ height, width }: Props) => {
     if (date) {
       if (endTime && date > endTime) {
         setStartTime(endTime);
-        updateSampleList(sampleListDispatch, {
+        updateSampleList(sampleListDispatch, requestProgressDispatch, {
           start_time: endTime,
           end_time: endTime,
         });
       } else {
         setStartTime(date);
-        updateSampleList(sampleListDispatch, {
+        updateSampleList(sampleListDispatch, requestProgressDispatch, {
           start_time: date,
           end_time: endTime,
         });
@@ -62,13 +64,13 @@ const VisualizationOptions = ({ height, width }: Props) => {
     if (date) {
       if (startTime && date < startTime) {
         setEndTime(startTime);
-        updateSampleList(sampleListDispatch, {
+        updateSampleList(sampleListDispatch, requestProgressDispatch, {
           start_time: startTime,
           end_time: startTime,
         });
       } else {
         setEndTime(date);
-        updateSampleList(sampleListDispatch, {
+        updateSampleList(sampleListDispatch, requestProgressDispatch, {
           start_time: startTime,
           end_time: date,
         });

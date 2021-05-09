@@ -16,6 +16,7 @@ export default (state: SampleListState, action: SampleListAction) => {
   switch (action.type) {
     case ACTION_SAMPLE_LIST_UPDATE_START: {
       let newState: SampleListLoadingState = {
+        loading: true,
         samples: state.samples,
         method: state.method,
       };

@@ -5,6 +5,7 @@ import {
   ACTION_SAMPLE_LIST_UPDATE_FINISH,
   ACTION_SAMPLE_LIST_UPDATE_START,
 } from "../reducers/sampleList/SampleListActions";
+import { RequestProgressDispatch } from "../RequestProgressContext";
 import { SampleListDispatch } from "../SampleListContext";
 
 interface UpdateSampleListParams {
@@ -16,6 +17,7 @@ interface UpdateSampleListParams {
 
 export async function updateSampleList(
   dispatch: SampleListDispatch,
+  progressDispatch: RequestProgressDispatch,
   { start_time, end_time, sample_classes, quant_method }: UpdateSampleListParams
 ) {
   dispatch({ type: ACTION_SAMPLE_LIST_UPDATE_START, params: {} });
@@ -24,11 +26,10 @@ export async function updateSampleList(
       start_time,
       end_time,
       sample_classes,
-      quant_method
+      quant_method,
+      progressDispatch
     );
     let sampleList = SampleStore.getState();
-    console.log(sampleList)
-    console.log(sampleList[0].values[0].values[0].method)
     dispatch({
       type: ACTION_SAMPLE_LIST_UPDATE_FINISH,
       params: {

@@ -16,9 +16,16 @@ class SampleStore {
     start_time: Date | undefined = undefined,
     end_time: Date | undefined = undefined,
     sample_classes: Class[] | undefined = undefined,
-    quant_method: undefined = undefined
+    quant_method: undefined = undefined,
+    progressDispatch: Function | undefined = undefined
   ): Promise<void> {
-    let samples = await server.getSamples(start_time, end_time, sample_classes, quant_method);
+    let samples = await server.getSamples(
+      start_time,
+      end_time,
+      sample_classes,
+      quant_method,
+      progressDispatch
+    );
     this._state = samples;
   }
 }

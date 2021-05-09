@@ -4,6 +4,7 @@ import {
   BarChartState,
   LineGraphState,
   TypesList,
+  AreaChartState,
 } from "./GraphTypeState";
 
 export default (state: GraphTypeState, action: GraphTypeAction) => {
@@ -16,6 +17,9 @@ export default (state: GraphTypeState, action: GraphTypeAction) => {
         case TypesList.line:
           let lineGraphState: LineGraphState = { name: "line" };
           return lineGraphState;
+        case TypesList.area:
+          let areaGraphState: AreaChartState = { name: "area" };
+          return areaGraphState;
         default:
           return state;
       }
