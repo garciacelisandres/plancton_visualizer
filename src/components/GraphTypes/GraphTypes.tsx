@@ -37,8 +37,8 @@ const GraphTypes = () => {
         {Object.keys(TypesList)
           .map((_key, index) => TypesList[index])
           .filter((value) => typeof value === "string")
-          .map((graphType) => (
-            <option value={graphType} className="capitalize">{graphType.toString()}</option>
+          .map((graphType, index) => (
+            <option key={index} value={graphType} className="capitalize">{graphType.toString()}</option>
           ))}
       </Select>
     </div>

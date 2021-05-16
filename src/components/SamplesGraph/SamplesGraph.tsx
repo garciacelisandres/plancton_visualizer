@@ -73,7 +73,7 @@ const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
       return (
         <>
           {classSelectState.classes && sampleListState.samples?.length > 0 ? (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="95%" height="95%">
               {renderGraph()}
             </ResponsiveContainer>
           ) : (

@@ -1,0 +1,24 @@
+.custom-tooltip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 0px 10px;
+  overflow: hidden;
+  pointer-events: all;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px 0px 0px 10px;
+  overflow-y: auto;
+  max-height: 20vh;
+}

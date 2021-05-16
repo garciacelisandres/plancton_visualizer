@@ -13,6 +13,9 @@ class ClassStore {
 
   async updateState(): Promise<void> {
     let classes = await server.getClasses();
+    classes.sort(function (a, b) {
+      return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+    });
     this._state = classes;
   }
 }

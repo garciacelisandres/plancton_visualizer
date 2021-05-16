@@ -10,6 +10,10 @@ export default (state: ClassSelectState, action: ClassSelectAction) => {
   switch (action.type) {
     case ACTION_CLASS_SELECT_UPDATE: {
       let newState = { classes: state.classes };
+      if (!action.class) {
+        return newState;
+      }
+
       if (
         newState.classes &&
         newState.classes.map((_) => _.name).includes(action.class.name)
@@ -20,7 +24,7 @@ export default (state: ClassSelectState, action: ClassSelectAction) => {
       } else if (newState.classes) {
         newState.classes.push(action.class);
       } else {
-        newState.classes = [action.class];
+        newState.classes = action.class ? [action.class] : [];
       }
       return newState;
     }
