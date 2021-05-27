@@ -40,16 +40,16 @@ jobs:
         command: |
           cd plancton_visualizer/
           echo pull the new image. First login in...
-          docker login https://docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GIT_TOKEN }}
+          sudo docker login https://docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GIT_TOKEN }}
           echo Login in Done.
           echo Downloading the new image...
-          docker pull docker.pkg.github.com/garciacelisandres/plancton_visualizer/plancton_visualizer:latest
+          sudo docker pull docker.pkg.github.com/garciacelisandres/plancton_visualizer/plancton_visualizer:latest
           echo Done.
           echo Stopping old image...
-          docker container stop plancton_visualizer_container
+          sudo docker container stop plancton_visualizer_container
           echo Done.
           echo Running new container...
-          docker run -d --rm -p 80:8080 --name plancton_visualizer_container docker.pkg.github.com/garciacelisandres/plancton_visualizer/plancton_visualizer:latest
+          sudo docker run -d --rm -p 80:8080 --name plancton_visualizer_container docker.pkg.github.com/garciacelisandres/plancton_visualizer/plancton_visualizer:latest
           echo Done
         host: ${{ secrets.WEB_HOST }}
         user: ${{ secrets.SSH_USER }}
