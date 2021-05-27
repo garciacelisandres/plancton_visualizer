@@ -1,0 +1,57 @@
+name: CI Plankton Website
+
+on:
+  push:
+    branches: [ main ]
+jobs:
+  unitary-test-webapp:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Unit tests
+        run: echo The tests will be here.
+  docker-push:
+    name: Push Docker Image to GitHub Packages
+    runs-on: ubuntu-latest
+    needs: [unitary-test-webapp]
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: garciacelisandres/plancton_visualizer/plancton_visualizer
+          tag_with_ref: true
+          tags: latest
+          
+  docker-deploy:
+    name: Re-deploy Docker Image
+    runs-on: ubuntu-latest
+    needs: [docker-push]
+    steps:
+    - name: docker redeploy
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          cd plancton_visualizer/
+          echo pull the new image. First login in...
+          docker login https://docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GIT_TOKEN }}
+          echo Login in Done.
+          echo Downloading the new image...
+          docker pull docker.pkg.github.com/garciacelisandres/plancton_visualizer/plancton_visualizer:latest
+          echo Done.
+          echo Stopping old image...
+          docker container stop plancton_visualizer_container
+          echo Done.
+          echo Running new container...
+          docker run -d --rm -p 80:8080 --name plancton_visualizer_container docker.pkg.github.com/garciacelisandres/plancton_visualizer/plancton_visualizer:latest
+          echo Done
+        host: ${{ secrets.WEB_HOST }}
+        user: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        args: "-tt -v"
