@@ -3,6 +3,7 @@
 const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
+const cors = require("cors");
 const app = express(); // create express app
 
 // Constants
@@ -10,6 +11,7 @@ const PORT = 8080;
 const HOST = "0.0.0.0";
 
 // add middlewares
+app.use(cors())
 app.use(helmet());
 app.use(express.static(path.join(__dirname, "build")));
 app.use(express.static("public"));
