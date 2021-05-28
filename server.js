@@ -11,6 +11,16 @@ const PORT = 8080;
 
 // add middlewares
 app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "plankton.westeurope.cloudapp.azure.com"],
+      styleSrc: ["'self'", "plankton.westeurope.cloudapp.azure.com"],
+      fontSrc: ["'self'", "plankton.westeurope.cloudapp.azure.com"],
+    },
+  })
+);
 app.use(express.static(path.join(__dirname, "build")));
 app.use(express.static("public"));
 
@@ -19,5 +29,5 @@ app.get("/", cors(), (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Started server on port ${PORT}`)
+  console.log(`Started server on port ${PORT}`);
 });
