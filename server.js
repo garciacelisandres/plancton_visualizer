@@ -10,14 +10,6 @@ const app = express(); // create express app
 const PORT = 8080;
 
 // add middlewares
-app.use(helmet.contentSecurityPolicy({
-  useDefaults: false,
-  directives: {
-    defaultSrc: ["'self'", "'unsafe-inline'"],
-    scriptSrc: ["'self'", "'unsafe-inline'"],
-    upgradeInsecureRequests: [],
-  },
-}));
 app.use(express.static(path.join(__dirname, "build")));
 app.use(express.static("public"));
 
