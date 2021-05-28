@@ -20,7 +20,6 @@ app.use(
       styleSrc: ["'self'", "plankton.westeurope.cloudapp.azure.com", "'unsafe-inline'"],
       fontSrc: ["'self'", "plankton.westeurope.cloudapp.azure.com"],
       objectSrc: ["'none'"],
-      upgradeInsecureRequests: [],
     },
   })
 );
