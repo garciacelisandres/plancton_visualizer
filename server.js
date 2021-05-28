@@ -12,12 +12,21 @@ const HOST = "0.0.0.0";
 
 // add middlewares
 app.use(cors())
-app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+  useDefaults: false,
+  directives: {
+    defaultSrc: ["'self'", "'unsafe-inline'"],
+    scriptSrc: ["'self'", "'unsafe-inline'"],
+    upgradeInsecureRequests: [],
+  },
+}));
 app.use(express.static(path.join(__dirname, "build")));
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
+app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-app.listen(PORT, HOST);
+app.listen(PORT, HOST, () => {
+  console.log(`Started server on port ${PORT}`)
+});
