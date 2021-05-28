@@ -13,14 +13,13 @@ const PORT = 8080;
 app.use(helmet());
 app.use(
   helmet.contentSecurityPolicy({
-    useDefaults: true,
     directives: {
-      baseUri: ["plankton.westeurope.cloudapp.azure.com"],
+      baseUri: ["'self'"],
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "plankton.westeurope.cloudapp.azure.com"],
       styleSrc: ["'self'", "plankton.westeurope.cloudapp.azure.com", "'unsafe-inline'"],
       fontSrc: ["'self'", "plankton.westeurope.cloudapp.azure.com"],
-      objectSrc: ["'self'"]
+      objectSrc: ["'none'"]
     },
   })
 );
