@@ -8,10 +8,8 @@ const app = express(); // create express app
 
 // Constants
 const PORT = 8080;
-const HOST = "0.0.0.0";
 
 // add middlewares
-app.use(cors())
 app.use(helmet.contentSecurityPolicy({
   useDefaults: false,
   directives: {
@@ -23,10 +21,10 @@ app.use(helmet.contentSecurityPolicy({
 app.use(express.static(path.join(__dirname, "build")));
 app.use(express.static("public"));
 
-app.get("*", (req, res) => {
+app.get("/", cors(), (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-app.listen(PORT, HOST, () => {
+app.listen(PORT, () => {
   console.log(`Started server on port ${PORT}`)
 });
