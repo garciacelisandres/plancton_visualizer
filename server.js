@@ -36,6 +36,6 @@ app.get("/", cors(), (req, res) => {
 });
 
 // Initialize Express app
-app.listen(PORT, () => {
+app.listen(`${process.env.PORT}`, () => {
   console.log(`Started server on port ${process.env.PORT}`);
 });
