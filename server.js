@@ -1,15 +1,17 @@
 "use strict";
 
+// Read .env
+const dotenv = require('dotenv');
+dotenv.config()
+
+// Initialize resources
 const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
-const app = express(); // create express app
+const app = express(); // Create express app
 
-// Constants
-const PORT = 8080;
-
-// add middlewares
+// Add middlewares
 app.use(helmet());
 app.use(
   helmet.contentSecurityPolicy({
@@ -17,9 +19,9 @@ app.use(
     directives: {
       baseUri: ["'self'"],
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "plankton.westeurope.cloudapp.azure.com"],
-      styleSrc: ["'self'", "plankton.westeurope.cloudapp.azure.com", "'unsafe-inline'"],
-      fontSrc: ["'self'", "plankton.westeurope.cloudapp.azure.com"],
+      scriptSrc: ["'self'", `${process.env.DNS}`],
+      styleSrc: ["'self'", `${process.env.DNS}`, "'unsafe-inline'"],
+      fontSrc: ["'self'", `${process.env.DNS}`],
       objectSrc: ["'none'"],
       upgradeInsecureRequests: null,
     },
@@ -28,10 +30,12 @@ app.use(
 app.use(express.static(path.join(__dirname, "build")));
 app.use(express.static("public"));
 
+// Add routes
 app.get("/", cors(), (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
+// Initialize Express app
 app.listen(PORT, () => {
-  console.log(`Started server on port ${PORT}`);
+  console.log(`Started server on port ${process.env.PORT}`);
 });

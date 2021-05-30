@@ -11,7 +11,7 @@ class ServerCall {
     quant_method: undefined = undefined,
     progressDispatch: Function | undefined = undefined
   ): Promise<Sample[]> {
-    var url = "http://localhost:5000/api/v0.1/samples";
+    var url = `${process.env.API_URL}/samples`;
     var params: string[] = [];
     if (start_time)
       params.push(`start_time=${Math.floor(start_time.getTime() / 1000)}`);
@@ -98,7 +98,7 @@ class ServerCall {
   }
 
   async getClasses(): Promise<Class[]> {
-    var url = "http://localhost:5000/api/v0.1/samples/classes";
+    var url = `${process.env.API_URL}/samples/classes`;
     let retrieved = await axios({
       method: "GET",
       url: url,
