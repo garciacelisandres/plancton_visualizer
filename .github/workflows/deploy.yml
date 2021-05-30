@@ -49,7 +49,7 @@ jobs:
           sudo docker container stop plancton_visualizer_container
           echo Done.
           echo Running new container...
-          sudo docker run -d --rm -p 8080:8080 --name plancton_visualizer_container docker.pkg.github.com/garciacelisandres/plancton_visualizer/plancton_visualizer:latest
+          sudo docker run -d --rm -p 8080:8080 --name plancton_visualizer_container --env-file .env docker.pkg.github.com/garciacelisandres/plancton_visualizer/plancton_visualizer:latest
           echo Done
         host: ${{ secrets.WEB_HOST }}
         user: ${{ secrets.SSH_USER }}
