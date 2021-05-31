@@ -26,6 +26,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
           repository: garciacelisandres/plancton_visualizer/plancton_visualizer
+          build_args: REACT_APP_API_URL=http://plankton.westeurope.cloudapp.azure.com/api/v0.1 
           tag_with_ref: true
           tags: latest
           
@@ -49,7 +50,7 @@ jobs:
           sudo docker container stop plancton_visualizer_container
           echo Done.
           echo Running new container...
-          sudo docker run -d --rm -p 8080:8080 --name plancton_visualizer_container --env-file .env -e REACT_APP_API_URL=http://plankton.westeurope.cloudapp.azure.com/api/v0.1 docker.pkg.github.com/garciacelisandres/plancton_visualizer/plancton_visualizer:latest
+          sudo docker run -d --rm -p 8080:8080 --name plancton_visualizer_container --env-file .env docker.pkg.github.com/garciacelisandres/plancton_visualizer/plancton_visualizer:latest
           echo Done
         host: ${{ secrets.WEB_HOST }}
         user: ${{ secrets.SSH_USER }}
