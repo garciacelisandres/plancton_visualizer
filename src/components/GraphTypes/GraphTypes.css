@@ -1,3 +1,30 @@
+.graph-types {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+}
+.graph-types-button {
+  max-width: 200px;
+  width: 200px;
+  height: 35px;
+  background-color: white;
+  border-radius: 5px;
+  border-color: #3f51b5;
+  border-style: solid;
+  font-size: medium;
+  color: rgb(51, 51, 51);
+}
+.graph-types-button:hover {
+    border-color: #a1aadb;
+    color: rgb(87, 87, 87);
+}
+.graph-types-button:active {
+    border-color: #3f51b5;
+    background-color: #3f51b5;
+    color: #ffffff;
+    transform: translateY(1px);
+}
 .capitalize {
-    text-transform:capitalize;
+  text-transform: capitalize;
 }

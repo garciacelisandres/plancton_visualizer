@@ -23,7 +23,7 @@ app.use(
       styleSrc: ["'self'", `${process.env.DNS}`, "'unsafe-inline'"],
       fontSrc: ["'self'", `${process.env.DNS}`],
       objectSrc: ["'none'"],
-      upgradeInsecureRequests: null,
+      upgradeInsecureRequests: [],
     },
   })
 );

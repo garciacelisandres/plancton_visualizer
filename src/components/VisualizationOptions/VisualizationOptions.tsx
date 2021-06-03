@@ -91,7 +91,7 @@ const VisualizationOptions: React.FC<Props> = ({ height, width }: Props) => {
         showTimeSelect
         timeFormat="HH:mm"
         timeIntervals={15}
-        dateFormat="dd/MM/yyyy, HH:mm"
+        dateFormat="MM/dd/yyyy, HH:mm"
       />
       <DatePicker
         onChange={handleEndTimeChange}
@@ -100,7 +100,7 @@ const VisualizationOptions: React.FC<Props> = ({ height, width }: Props) => {
         showTimeSelect
         timeFormat="HH:mm"
         timeIntervals={15}
-        dateFormat="dd/MM/yyyy, HH:mm"
+        dateFormat="MM/dd/yyyy, HH:mm"
       />
       <IconButton onClick={handleConstantRetrievalChange}>
         {constantRetrieval ? <RadioButtonChecked /> : <RadioButtonUnchecked />}

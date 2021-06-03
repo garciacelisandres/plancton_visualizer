@@ -64,19 +64,18 @@ const GridLayout = () => {
   const cols = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
 
   return (
-    <div>
+    <div className="grid-layout-container">
       <GraphTypeProvider>
         <RequestProgressProvider>
           <ResponsiveReactGridLayout
             layouts={layout}
             onLayoutChange={() => {}}
-            className="layout"
             rowHeight={50}
             cols={cols}
             isDraggable={false}
             isResizable={false}
           >
-            <div key="class-list" className="react-grid-item item">
+            <div key="class-list">
               <ClassesList height={rowHeight * 6} width={rowWidth * 6} />
             </div>
             <div key="graph">
