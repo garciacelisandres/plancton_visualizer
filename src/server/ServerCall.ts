@@ -53,7 +53,6 @@ class ServerCall {
           (progressEvent.loaded * 100) / progressEvent.total
         );
         if (progressDispatch) {
-          console.log(percentCompleted);
           progressDispatch({
             type: ACTION_REQUEST_PROGRESS_UPDATE,
             params: { value: percentCompleted },

@@ -1,3 +1,5 @@
+import "./ClassesList.css";
+
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -14,10 +16,7 @@ import {
   ACTION_CLASS_SELECT_UPDATE,
 } from "../../contexts/reducers/classSelect/ClassSelectActions";
 import { updateClassList } from "../../contexts/util/ClassListUtil";
-import Collapse from "@material-ui/core/Collapse";
-
-import "./ClassesList.css";
-import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import AutorenewIcon from "@material-ui/icons/Autorenew";
 
 interface Props {
   height: number;
@@ -61,6 +60,10 @@ const ClassesList = ({ height, width }: Props) => {
     updateClassList(classListDispatch, classSelectDispatch);
   }, []);
 
+  const reloadClasses = () => {
+    updateClassList(classListDispatch, classSelectDispatch);
+  };
+
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     index: number
@@ -85,6 +88,7 @@ const ClassesList = ({ height, width }: Props) => {
   return (
     <div className={classes.root}>
       <List className={classes.list} component="nav" aria-label="classlist">
+        <p>Classes list:</p>
         {classListState.classes.length > 0 ? (
           classListState.classes.map((_class, index) => (
             <ListItem
@@ -99,8 +103,11 @@ const ClassesList = ({ height, width }: Props) => {
             </ListItem>
           ))
         ) : (
-          <ListItem unselectable="on" key={0}>
-            <em>No classes</em>
+          <ListItem unselectable="on" key={0} className="no-classes-found">
+            <p>No classes found</p>
+            <IconButton onClick={reloadClasses}>
+              <AutorenewIcon />
+            </IconButton>
           </ListItem>
         )}
       </List>

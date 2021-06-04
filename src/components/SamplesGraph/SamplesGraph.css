@@ -1,0 +1,8 @@
+.samples-graph-nodata-container {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: medium;
+    color: rgb(94, 94, 94);
+}

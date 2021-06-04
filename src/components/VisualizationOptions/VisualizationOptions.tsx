@@ -1,4 +1,4 @@
-import "react-datepicker/dist/react-datepicker.css";
+import "./VisualizationOptions.css";
 
 import IconButton from "@material-ui/core/IconButton";
 import React, { SyntheticEvent, useEffect, useState } from "react";
@@ -8,6 +8,12 @@ import RadioButtonUnchecked from "@material-ui/icons/RadioButtonUnchecked";
 import { updateSampleList } from "../../contexts/util/SampleListUtil";
 import { useSampleList } from "../../contexts/SampleListContext";
 import { useRequestProgress } from "../../contexts/RequestProgressContext";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
+import cr from "../../util/ConstantRetrieval";
 
 interface Props {
   height: number;
@@ -40,6 +46,7 @@ const VisualizationOptions: React.FC<Props> = ({ height, width }: Props) => {
     date: Date | null,
     _event: SyntheticEvent<any, Event> | undefined
   ) => {
+    _event?.stopPropagation();
     if (date) {
       if (endTime && date > endTime) {
         setStartTime(endTime);
@@ -78,34 +85,108 @@ const VisualizationOptions: React.FC<Props> = ({ height, width }: Props) => {
     }
   };
 
-  const handleConstantRetrievalChange = () => {
+  const handleConstantRetrievalChange = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation();
     setConstantRetrieval(!constantRetrieval);
+    if (!constantRetrieval) {
+      cr.start(requestSampleListUpdate);
+    } else {
+      cr.stop();
+    }
+  };
+
+  const requestSampleListUpdate = () => {
+    updateSampleList(sampleListDispatch, requestProgressDispatch, {
+      start_time: startTime,
+      end_time: endTime,
+    });
   };
 
   return (
-    <>
-      <DatePicker
-        onChange={handleStartTimeChange}
-        selected={startTime}
-        dropdownMode="scroll"
-        showTimeSelect
-        timeFormat="HH:mm"
-        timeIntervals={15}
-        dateFormat="MM/dd/yyyy, HH:mm"
-      />
-      <DatePicker
-        onChange={handleEndTimeChange}
-        selected={endTime}
-        dropdownMode="scroll"
-        showTimeSelect
-        timeFormat="HH:mm"
-        timeIntervals={15}
-        dateFormat="MM/dd/yyyy, HH:mm"
-      />
-      <IconButton onClick={handleConstantRetrievalChange}>
-        {constantRetrieval ? <RadioButtonChecked /> : <RadioButtonUnchecked />}
-      </IconButton>
-    </>
+    <div className="vis-opts-container">
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-label="Expand"
+          aria-controls="additional-actions1-content"
+          id="additional-actions1-header"
+          className="vis-opts-summary-container"
+        >
+          <label
+            onClick={(event) => event.stopPropagation()}
+            className="vis-options-datepicker-container"
+          >
+            <p className="vis-options-datepicker-label">Interval start:</p>
+            <DatePicker
+              onChange={handleStartTimeChange}
+              onSelect={(_date, event) => event?.stopPropagation()}
+              onClickOutside={(event) => event.stopPropagation()}
+              onFocus={(event) => event.stopPropagation()}
+              selected={startTime}
+              dropdownMode="scroll"
+              showTimeInput
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              dateFormat="MM/dd/yyyy, HH:mm"
+              popperPlacement="bottom"
+              withPortal
+            />
+          </label>
+          <label
+            onClick={(event) => event.stopPropagation()}
+            className="vis-options-datepicker-container"
+          >
+            <p className="vis-options-datepicker-label">Interval end:</p>
+            <DatePicker
+              onChange={handleEndTimeChange}
+              onSelect={(_date, event) => event?.stopPropagation()}
+              onClickOutside={(event) => event.stopPropagation()}
+              onFocus={(event) => event.stopPropagation()}
+              selected={endTime}
+              dropdownMode="scroll"
+              showTimeInput
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              dateFormat="MM/dd/yyyy, HH:mm"
+              popperPlacement="bottom"
+              withPortal
+            />
+          </label>
+          <IconButton
+            onClick={handleConstantRetrievalChange}
+            onFocus={(event) => event.stopPropagation()}
+          >
+            {constantRetrieval ? (
+              <RadioButtonChecked className="animated-icon" />
+            ) : (
+              <RadioButtonUnchecked />
+            )}
+          </IconButton>
+        </AccordionSummary>
+        <AccordionDetails>
+          <DatePicker
+            onChange={handleStartTimeChange}
+            selected={startTime}
+            dropdownMode="scroll"
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={15}
+            dateFormat="MM/dd/yyyy, HH:mm"
+          />
+          <DatePicker
+            onChange={handleEndTimeChange}
+            selected={endTime}
+            dropdownMode="scroll"
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={15}
+            dateFormat="MM/dd/yyyy, HH:mm"
+          />
+        </AccordionDetails>
+      </Accordion>
+    </div>
   );
 };
 

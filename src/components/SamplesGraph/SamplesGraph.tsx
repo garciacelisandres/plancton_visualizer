@@ -1,3 +1,5 @@
+import "./SamplesGraph.css";
+
 import React, { ReactElement } from "react";
 import { useClassSelect } from "../../contexts/ClassSelectContext";
 import { useSampleList } from "../../contexts/SampleListContext";
@@ -68,7 +70,11 @@ const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
 
   function graphState(): ReactElement {
     if (isSampleListLoadingState(sampleListState)) {
-      return <CircularProgressWithLabel value={requestProgressState.value} />;
+      return (
+        <div className="samples-graph-nodata-container">
+          <CircularProgressWithLabel value={requestProgressState.value} />
+        </div>
+      );
     } else if (isSampleListSuccessState(sampleListState)) {
       return (
         <>
@@ -77,18 +83,26 @@ const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
               {renderGraph()}
             </ResponsiveContainer>
           ) : (
-            <p>No data</p>
+            <div className="samples-graph-nodata-container">
+              <p>No data</p>
+            </div>
           )}
         </>
       );
     } else if (isSampleListErrorState(sampleListState)) {
       return (
-        <p>
-          An error ocurred while retrieving samples. Please, reload the page.
-        </p>
+        <div className="samples-graph-nodata-container">
+          <p>
+            An error ocurred while retrieving samples. Please, reload the page.
+          </p>
+        </div>
       );
     } else {
-      return <p>No data</p>;
+      return (
+        <div className="samples-graph-nodata-container">
+          <p>No data</p>
+        </div>
+      );
     }
   }
 
