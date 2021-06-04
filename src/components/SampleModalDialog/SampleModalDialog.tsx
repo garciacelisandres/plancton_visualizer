@@ -1,3 +1,5 @@
+import "./SampleModalDialog.css";
+
 import Box from "@material-ui/core/Box";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -21,6 +23,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import { makeStyles } from "@material-ui/core/styles";
+import Checkbox from "@material-ui/core/Checkbox";
 
 interface Props {
   onClose: () => void;
@@ -38,15 +41,19 @@ const useStyles = makeStyles({
 });
 
 const SampleModalDialog: React.FC<Props> = ({ open, onClose, sampleData }) => {
+  // State
   const [selectedQuantMethod, setSelectedQuantMethod] = useState<string>(
     sampleData ? sampleData.values[0].values[0].method : ""
   );
   const [value, setValue] = useState<number>(0);
+  const [filterTable, setFilterTable] = useState<string>("");
+  const [seeFullNumbers, setSeeFullNumbers] = useState<boolean>(false);
   const { classListState } = useClassList();
+  // List of quantification methods
   const quantMethodsList = sampleData
     ? sampleData.values[0].values.map((quant_method) => quant_method.method)
     : [];
-  const [filterTable, setFilterTable] = useState<string>("");
+  // Styling classes
   const classes = useStyles();
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -69,6 +76,12 @@ const SampleModalDialog: React.FC<Props> = ({ open, onClose, sampleData }) => {
     setFilterTable(event.target.value);
   };
 
+  const handleChangeSeeFullNumbers = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setSeeFullNumbers(!seeFullNumbers);
+  };
+
   useEffect(() => {
     let method: string = sampleData
       ? sampleData.values[0].values[0].method
@@ -80,14 +93,16 @@ const SampleModalDialog: React.FC<Props> = ({ open, onClose, sampleData }) => {
     <>
       {sampleData && (
         <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth={true}>
-          <DialogTitle id="dialog-title">
+          <DialogTitle id="sample-dialog-title">
             Sample data - <em>{sampleData.name}</em>
           </DialogTitle>
           <DialogContent>
             <Tabs
               value={value}
               onChange={handleTabChange}
-              aria-label="simple tabs example"
+              aria-label="sample-dialog-tabs"
+              indicatorColor="primary"
+              textColor="primary"
             >
               <Tab label="Overview" />
               <Tab label="Table" />
@@ -116,7 +131,8 @@ const SampleModalDialog: React.FC<Props> = ({ open, onClose, sampleData }) => {
                         {new Date(sampleData.date.toISOString()).toTimeString()}
                       </p>
                     </Grid>
-                    <Grid>
+                    <Grid className="overview-tabpanel-quantmethod-container">
+                      <p>Quantification method selected:</p>
                       <Select
                         native
                         labelId="quant-method-select-label"
@@ -143,17 +159,31 @@ const SampleModalDialog: React.FC<Props> = ({ open, onClose, sampleData }) => {
               </Grid>
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <FormControl margin="dense">
-                <InputLabel htmlFor="filter-table" style={{ paddingLeft: 10 }}>
-                  Filter by class
-                </InputLabel>
-                <OutlinedInput
-                  id="filter-table"
-                  value={filterTable}
-                  onChange={filterTableByClassName}
-                  style={{ padding: 10 }}
-                />
-              </FormControl>
+              <div className="table-tabpanel-inputs-container">
+                <FormControl margin="dense">
+                  <InputLabel
+                    htmlFor="filter-table"
+                    style={{ paddingLeft: 10 }}
+                  >
+                    Filter by class
+                  </InputLabel>
+                  <OutlinedInput
+                    id="filter-table"
+                    value={filterTable}
+                    onChange={filterTableByClassName}
+                    style={{ padding: 10 }}
+                  />
+                </FormControl>
+                <div className="table-tabpanel-checkbox-container">
+                  <Checkbox
+                    checked={seeFullNumbers}
+                    onChange={handleChangeSeeFullNumbers}
+                    inputProps={{ "aria-label": "checkbox-seefullnumbers" }}
+                    color="primary"
+                  />
+                  <p>See full numbers</p>
+                </div>
+              </div>
               <Paper className={classes.root}>
                 <TableContainer className={classes.container}>
                   <Table stickyHeader aria-label="sample_table">
@@ -176,8 +206,17 @@ const SampleModalDialog: React.FC<Props> = ({ open, onClose, sampleData }) => {
                     </TableHead>
                     <TableBody>
                       {classListState.classes
-                        .filter((_class) =>
-                          _class.name.toLowerCase().startsWith(filterTable)
+                        .filter(
+                          (_class) =>
+                            filterTable.trim().length === 0 ||
+                            filterTable
+                              .split(",")
+                              .map((value) => value.trim())
+                              .filter((value) => value.length !== 0)
+                              .map((filter) =>
+                                _class.name.toLowerCase().startsWith(filter)
+                              )
+                              .includes(true)
                         )
                         .map((_class, index) => (
                           <TableRow key={_class.id}>
@@ -190,7 +229,9 @@ const SampleModalDialog: React.FC<Props> = ({ open, onClose, sampleData }) => {
                                 )?.value;
                               return (
                                 <TableCell key={`${_class.id}-${quant_method}`}>
-                                  {foundValue}
+                                  {seeFullNumbers
+                                    ? foundValue
+                                    : foundValue?.toFixed(5)}
                                 </TableCell>
                               );
                             })}

@@ -87,30 +87,32 @@ const ClassesList = ({ height, width }: Props) => {
 
   return (
     <div className={classes.root}>
-      <List className={classes.list} component="nav" aria-label="classlist">
+      <div>
         <p>Classes list:</p>
-        {classListState.classes.length > 0 ? (
-          classListState.classes.map((_class, index) => (
-            <ListItem
-              button
-              selected={classSelectState.classes
-                ?.map((_) => _.name)
-                .includes(_class.name)}
-              onClick={(event) => handleListItemClick(event, index)}
-              key={index}
-            >
-              <ListItemText primary={_class.name} />
+        <List className={classes.list} component="nav" aria-label="classlist">
+          {classListState.classes.length > 0 ? (
+            classListState.classes.map((_class, index) => (
+              <ListItem
+                button
+                selected={classSelectState.classes
+                  ?.map((_) => _.name)
+                  .includes(_class.name)}
+                onClick={(event) => handleListItemClick(event, index)}
+                key={index}
+              >
+                <ListItemText primary={_class.name} />
+              </ListItem>
+            ))
+          ) : (
+            <ListItem unselectable="on" key={0} className="no-classes-found">
+              <p>No classes found</p>
+              <IconButton onClick={reloadClasses}>
+                <AutorenewIcon />
+              </IconButton>
             </ListItem>
-          ))
-        ) : (
-          <ListItem unselectable="on" key={0} className="no-classes-found">
-            <p>No classes found</p>
-            <IconButton onClick={reloadClasses}>
-              <AutorenewIcon />
-            </IconButton>
-          </ListItem>
-        )}
-      </List>
+          )}
+        </List>
+      </div>
       <Button className={classes.button} onClick={handleDeleteSelection}>
         Delete selection
       </Button>

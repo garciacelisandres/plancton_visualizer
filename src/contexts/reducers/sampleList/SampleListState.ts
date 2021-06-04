@@ -13,6 +13,12 @@ export interface SampleListErrorState extends SampleListState {
   error: string;
 }
 
+export function isSampleListState(
+  obj: any
+): obj is SampleListState {
+  return "samples" in obj && "method" in obj;
+}
+
 export function isSampleListLoadingState(
   obj: any
 ): obj is SampleListLoadingState {

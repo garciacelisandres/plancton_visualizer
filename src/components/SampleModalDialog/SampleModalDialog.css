@@ -1,0 +1,29 @@
+.table-tabpanel-inputs-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.table-tabpanel-checkbox-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.table-tabpanel-checkbox-container > p {
+    font-size: medium;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.54);
+}
+.overview-tabpanel-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.overview-tabpanel-quantmethod-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.overview-tabpanel-quantmethod-container > p {
+    padding: 0px 10px 0px 0px;
+}

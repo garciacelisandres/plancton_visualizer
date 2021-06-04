@@ -15,6 +15,8 @@ import { ClassSelectState } from "../../../contexts/reducers/classSelect/ClassSe
 import { SampleListState } from "../../../contexts/reducers/sampleList/SampleListState";
 import { Sample } from "../../../model/Sample";
 
+import palette from "../../../util/ColorPalette";
+
 interface Props {
   sampleListState: SampleListState;
   classSelectState: ClassSelectState;
@@ -30,18 +32,6 @@ const AreaGraphType: React.FC<Props> = ({
   height,
   handleClickOpen,
 }) => {
-  const palette = [
-    "#d36135",
-    "#7fb069",
-    "#ece4b7",
-    "#e6aa68",
-    "#02020b",
-    "#161032",
-    "#faff81",
-    "#ffc53a",
-    "#e06d06",
-    "#b26700",
-  ];
   return (
     <AreaChart
       width={width}

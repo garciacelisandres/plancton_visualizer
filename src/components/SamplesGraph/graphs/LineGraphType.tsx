@@ -13,6 +13,8 @@ import { ClassSelectState } from "../../../contexts/reducers/classSelect/ClassSe
 import { SampleListState } from "../../../contexts/reducers/sampleList/SampleListState";
 import { Sample } from "../../../model/Sample";
 
+import palette from "../../../util/ColorPalette";
+
 import "./GraphsStyle.css";
 
 interface Props {
@@ -30,19 +32,6 @@ const LineGraphType: React.FC<Props> = ({
   height,
   handleClickOpen,
 }) => {
-  const palette = [
-    "#d36135",
-    "#7fb069",
-    "#ece4b7",
-    "#e6aa68",
-    "#02020b",
-    "#161032",
-    "#faff81",
-    "#ffc53a",
-    "#e06d06",
-    "#b26700",
-  ];
-
   const formatDate = (date: Date) => {
     let dd: number | string = date.getDate();
     let mm: number | string = date.getMonth() + 1;
@@ -78,7 +67,7 @@ const LineGraphType: React.FC<Props> = ({
             </text>
           );
         }}
-        interval={Math.floor(sampleListState.samples.length/6)}
+        interval={Math.floor(sampleListState.samples.length / 6)}
         type="category"
         allowDuplicatedCategory={false}
       />
@@ -129,22 +118,38 @@ const LineGraphType: React.FC<Props> = ({
 };
 
 const CustomTooltip = ({ active, payload, selectedClasses, palette }: any) => {
-  const [showClasses, setShowClasses] = useState<boolean>(false)
   if (active && payload && payload.length) {
     let date: Date = payload[0].payload.date;
     return (
       <div className="custom-tooltip">
         <div className="intro">
-          <p>Date: {`${date.toDateString()}, ${date.toTimeString().substring(0, 9)}`}</p>
-          <button onClick={() => setShowClasses(!showClasses)}>Show classes</button>
+          <p>
+            Date:{" "}
+            {`${date.toDateString()}, ${date.toTimeString().substring(0, 9)}`}
+          </p>
         </div>
         <div className="label">
-          {showClasses && payload.map((each: any, index: number) => (
-            <p
-              key={index}
-              style={{ color: `${palette[index % palette.length]}` }}
-            >{`${selectedClasses[index].name} : ${each.value}`}</p>
-          ))}
+          {payload
+            .sort((a: any, b: any) => b.value - a.value)
+            .slice(0, 5)
+            .map((each: any, index: number) => ({
+              selectedClass: selectedClasses[index].name,
+              value: each.value,
+              index: index,
+            }))
+            .sort((a: any, b: any) => b.value - a.value)
+            .map(
+              (tuple: {
+                selectedClass: string;
+                value: number;
+                index: number;
+              }) => (
+                <p
+                  key={tuple.index}
+                  style={{ color: `${palette[tuple.index % palette.length]}` }}
+                >{`${tuple.selectedClass} : ${tuple.value.toFixed(5)}`}</p>
+              )
+            )}
         </div>
       </div>
     );

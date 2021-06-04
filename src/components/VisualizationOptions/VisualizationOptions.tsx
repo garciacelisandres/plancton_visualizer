@@ -12,8 +12,10 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Select from "@material-ui/core/Select";
 
 import cr from "../../util/ConstantRetrieval";
+import { ACTION_SAMPLE_LIST_UPDATE_QUANT_METHOD } from "../../contexts/reducers/sampleList/SampleListActions";
 
 interface Props {
   height: number;
@@ -21,7 +23,7 @@ interface Props {
 }
 
 const VisualizationOptions: React.FC<Props> = ({ height, width }: Props) => {
-  const { sampleListDispatch } = useSampleList();
+  const { sampleListState, sampleListDispatch } = useSampleList();
 
   const [startTime, setStartTime] = useState<Date | undefined>(() => {
     let previousMonth = new Date();
@@ -34,6 +36,12 @@ const VisualizationOptions: React.FC<Props> = ({ height, width }: Props) => {
   const [endTime, setEndTime] = useState<Date | undefined>(new Date());
   const [constantRetrieval, setConstantRetrieval] = useState<boolean>(false);
   const { requestProgressDispatch } = useRequestProgress();
+  const quantMethodsList =
+    sampleListState.samples.length > 0
+      ? sampleListState.samples[0].values[0].values.map(
+          (quant_method) => quant_method.method
+        )
+      : [];
 
   useEffect(() => {
     updateSampleList(sampleListDispatch, requestProgressDispatch, {
@@ -94,6 +102,23 @@ const VisualizationOptions: React.FC<Props> = ({ height, width }: Props) => {
       cr.start(requestSampleListUpdate);
     } else {
       cr.stop();
+    }
+  };
+
+  const handleQuantMethodUpdate = (
+    event: React.ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) => {
+    if (event) {
+      let method: string = event.target.value as string;
+      sampleListDispatch({
+        type: ACTION_SAMPLE_LIST_UPDATE_QUANT_METHOD,
+        params: {
+          method: method,
+        },
+      });
     }
   };
 
@@ -165,25 +190,23 @@ const VisualizationOptions: React.FC<Props> = ({ height, width }: Props) => {
             )}
           </IconButton>
         </AccordionSummary>
-        <AccordionDetails>
-          <DatePicker
-            onChange={handleStartTimeChange}
-            selected={startTime}
-            dropdownMode="scroll"
-            showTimeSelect
-            timeFormat="HH:mm"
-            timeIntervals={15}
-            dateFormat="MM/dd/yyyy, HH:mm"
-          />
-          <DatePicker
-            onChange={handleEndTimeChange}
-            selected={endTime}
-            dropdownMode="scroll"
-            showTimeSelect
-            timeFormat="HH:mm"
-            timeIntervals={15}
-            dateFormat="MM/dd/yyyy, HH:mm"
-          />
+        <AccordionDetails className="vis-option-details-container">
+          <div className="vis-option-details-quantmethod-container">
+            <p>Quantification method selected:</p>
+            <Select
+              native
+              labelId="quant-method-select-label"
+              id="quant-method-select-select"
+              value={sampleListState.method}
+              onChange={handleQuantMethodUpdate}
+            >
+              {quantMethodsList.map((value, index) => (
+                <option key={index} value={value}>
+                  {value}
+                </option>
+              ))}
+            </Select>
+          </div>
         </AccordionDetails>
       </Accordion>
     </div>

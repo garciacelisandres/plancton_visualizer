@@ -1,26 +1,15 @@
 import React from "react";
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { Cell, Pie, PieChart, Tooltip } from "recharts";
 import { Class } from "../../../model/Class";
 import { Sample } from "../../../model/Sample";
+
+import palette from "../../../util/ColorPalette";
 
 interface Props {
   sampleData: Sample;
   selectedQuantMethod: string;
   classList: Class[];
 }
-
-const palette = [
-  "#d36135",
-  "#7fb069",
-  "#ece4b7",
-  "#e6aa68",
-  "#02020b",
-  "#161032",
-  "#faff81",
-  "#ffc53a",
-  "#e06d06",
-  "#b26700",
-];
 
 const PieGraphType: React.FC<Props> = ({
   sampleData,
@@ -58,7 +47,19 @@ const PieGraphType: React.FC<Props> = ({
             />
           ))}
       </Pie>
-      <Tooltip />
+      <Tooltip
+        content={(content: any) => {
+          let name = content.payload[0]?.name;
+          let value = content.payload[0]?.value;
+          return (
+            <div className="custom-tooltip">
+              <p>
+                {name}: {value?.toFixed(5)}
+              </p>
+            </div>
+          );
+        }}
+      />
     </PieChart>
   );
 };

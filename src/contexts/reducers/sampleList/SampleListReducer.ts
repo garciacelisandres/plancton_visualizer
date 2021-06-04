@@ -3,6 +3,7 @@ import {
   ACTION_SAMPLE_LIST_UPDATE_START,
   ACTION_SAMPLE_LIST_UPDATE_FINISH,
   ACTION_SAMPLE_LIST_UPDATE_ERROR,
+  ACTION_SAMPLE_LIST_UPDATE_QUANT_METHOD,
   SampleListAction,
 } from "./SampleListActions";
 import {
@@ -34,6 +35,13 @@ export default (state: SampleListState, action: SampleListAction) => {
         samples: state.samples,
         method: state.method,
         error: action.params.error,
+      };
+      return newState;
+    }
+    case ACTION_SAMPLE_LIST_UPDATE_QUANT_METHOD: {
+      let newState: SampleListState = {
+        samples: state.samples,
+        method: action.params.method,
       };
       return newState;
     }
