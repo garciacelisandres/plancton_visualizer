@@ -1,5 +1,6 @@
 .vis-opts-container {
   max-height: inherit;
+  height: inherit;
 }
 .vis-opts-summary-container {
   display: flex !important;
@@ -19,6 +20,7 @@
   justify-content: space-around;
   flex-wrap: wrap;
   width: 100%;
+  margin: 0 !important;
 }
 .vis-options-datepicker-container {
   display: flex;
@@ -41,6 +43,14 @@
 }
 .vis-option-details-quantmethod-container > p {
   padding: 0px 10px;
+}
+.MuiAccordion-rounded:last-child {
+  border-bottom-left-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+}
+.MuiAccordion-rounded:first-child {
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
 }
 
 @keyframes icon {
