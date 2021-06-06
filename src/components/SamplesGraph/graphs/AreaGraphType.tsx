@@ -1,12 +1,12 @@
+import "./GraphsStyle.css";
+
 import React from "react";
 import {
   Area,
   AreaChart,
-  Bar,
-  BarChart,
+  Brush,
   CartesianGrid,
   Legend,
-  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -16,6 +16,7 @@ import { SampleListState } from "../../../contexts/reducers/sampleList/SampleLis
 import { Sample } from "../../../model/Sample";
 
 import palette from "../../../util/ColorPalette";
+import CustomTooltip from "../util/CustomTooltip";
 
 interface Props {
   sampleListState: SampleListState;
@@ -32,6 +33,25 @@ const AreaGraphType: React.FC<Props> = ({
   height,
   handleClickOpen,
 }) => {
+  const formatDate = (date: Date) => {
+    let dd: number | string = date.getDate();
+    let mm: number | string = date.getMonth() + 1;
+    const yyyy = date.getFullYear();
+    if (dd < 10) dd = `0${dd}`;
+    if (mm < 10) mm = `0${mm}`;
+
+    let HH: number | string = date.getHours();
+    let MM: number | string = date.getMinutes();
+    if (HH < 10) HH = `0${HH}`;
+    if (MM < 10) MM = `0${MM}`;
+
+    return `${mm}-${dd}-${yyyy} ${HH}:${MM}`;
+  };
+
+  const brushTickFormatter = (payload: any, index: number): React.ReactText => {
+    return formatDate(new Date(payload));
+  };
+
   return (
     <AreaChart
       width={width}
@@ -44,11 +64,22 @@ const AreaGraphType: React.FC<Props> = ({
         bottom: 5,
       }}
     >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="date" />
+      <XAxis
+        dataKey="date"
+        tick={({ x, y, payload }) => {
+          let date: Date = payload.value as Date;
+          return (
+            <text x={x - 30} y={y + 15}>
+              {`${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`}
+            </text>
+          );
+        }}
+        interval={Math.floor(sampleListState.samples.length / 6)}
+        type="category"
+        allowDuplicatedCategory={false}
+      />
       <YAxis />
-      <Tooltip />
-      <Legend />
+      <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
       {classSelectState.classes?.map((_class, index) =>
         _class ? (
           <Area
@@ -76,6 +107,18 @@ const AreaGraphType: React.FC<Props> = ({
           <></>
         )
       )}
+      <Tooltip
+        content={
+          <CustomTooltip
+            selectedClasses={classSelectState.classes}
+            palette={palette}
+          />
+        }
+        isAnimationActive={false}
+        position={{ y: 50 }}
+      />
+      <Brush dataKey="date" tickFormatter={brushTickFormatter} />
+      <Legend />
     </AreaChart>
   );
 };
