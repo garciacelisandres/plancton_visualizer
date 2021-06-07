@@ -57,6 +57,12 @@ const LineGraphType: React.FC<Props> = ({
       width={width}
       height={height}
       data={sampleListState.samples.map((sample) => sample.toJSON())}
+      margin={{
+        top: 20,
+        right: 30,
+        left: 20,
+        bottom: 5,
+      }}
     >
       <XAxis
         dataKey="date"

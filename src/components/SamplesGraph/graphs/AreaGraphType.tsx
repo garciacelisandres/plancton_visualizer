@@ -93,7 +93,7 @@ const AreaGraphType: React.FC<Props> = ({
             }}
             stackId="a"
             fill={palette[index % palette.length]}
-            key={_class.name}
+            name={_class.name}
             activeDot={{
               onClick: (event, data) => {
                 let dataWithPayload = data as any;

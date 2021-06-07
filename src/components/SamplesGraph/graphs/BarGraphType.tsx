@@ -52,12 +52,11 @@ const BarGraphType: React.FC<Props> = ({
   const brushTickFormatter = (payload: any, index: number): React.ReactText => {
     return formatDate(new Date(payload));
   };
-  
+
   return (
-    <ResponsiveContainer width="100%" height="100%">
       <BarChart
-        width={500}
-        height={300}
+        width={width}
+        height={height}
         data={sampleListState.samples.map((sample) => sample.toJSON())}
         margin={{
           top: 20,
@@ -79,8 +78,6 @@ const BarGraphType: React.FC<Props> = ({
             );
           }}
           interval={Math.floor(sampleListState.samples.length / 6)}
-          type="category"
-          allowDuplicatedCategory={false}
         />
         <YAxis />
         <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
@@ -96,7 +93,9 @@ const BarGraphType: React.FC<Props> = ({
                 return value;
               }}
               stackId="a"
+              isAnimationActive={false}
               fill={palette[index % palette.length]}
+              name={_class.name}
               key={_class.name}
               onClick={handleClickOpen}
             />
@@ -105,19 +104,18 @@ const BarGraphType: React.FC<Props> = ({
           )
         )}
         <Tooltip
-          content={
+          content={(
             <CustomTooltip
               selectedClasses={classSelectState.classes}
               palette={palette}
             />
-          }
+          )}
           isAnimationActive={false}
           position={{ y: 50 }}
         />
         <Brush dataKey="date" tickFormatter={brushTickFormatter} />
         <Legend />
       </BarChart>
-    </ResponsiveContainer>
   );
 };
 
