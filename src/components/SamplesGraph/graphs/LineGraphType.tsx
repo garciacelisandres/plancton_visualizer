@@ -14,6 +14,7 @@ import { SampleListState } from "../../../contexts/reducers/sampleList/SampleLis
 import { Sample } from "../../../model/Sample";
 
 import palette from "../../../util/ColorPalette";
+import { IOpacityState } from "../SamplesGraph";
 import CustomTooltip from "../util/CustomTooltip";
 
 import "./GraphsStyle.css";
@@ -23,6 +24,8 @@ interface Props {
   classSelectState: ClassSelectState;
   width: number;
   height: number;
+  opacity: IOpacityState | undefined;
+  setOpacity: Function;
   handleClickOpen: (sample: Sample) => void;
 }
 
@@ -31,6 +34,8 @@ const LineGraphType: React.FC<Props> = ({
   classSelectState,
   width,
   height,
+  opacity,
+  setOpacity,
   handleClickOpen,
 }) => {
   const formatDate = (date: Date) => {
@@ -50,6 +55,23 @@ const LineGraphType: React.FC<Props> = ({
 
   const brushTickFormatter = (payload: any, index: number): React.ReactText => {
     return formatDate(new Date(payload));
+  };
+
+  const handleLegendMouseEnter = (event: any) => {
+    let className = event.payload.name as string;
+    if (opacity) {
+      Object.keys(opacity).forEach((value) => {
+        if (value !== className) opacity[value] = 0.2;
+      });
+      setOpacity({...opacity});
+    }
+  };
+
+  const handleLegendMouseLeave = (event: any) => {
+    if (opacity) {
+      Object.keys(opacity).forEach((value) => (opacity[value] = 1));
+      setOpacity({...opacity});
+    }
   };
 
   return (
@@ -94,6 +116,7 @@ const LineGraphType: React.FC<Props> = ({
               return value;
             }}
             stroke={palette[index % palette.length]}
+            strokeOpacity={opacity ? opacity[_class.name] : 1}
             key={_class.name}
             activeDot={{
               onClick: (event, data) => {
@@ -119,7 +142,10 @@ const LineGraphType: React.FC<Props> = ({
         position={{ y: 50 }}
       />
       <Brush dataKey="date" tickFormatter={brushTickFormatter} />
-      <Legend />
+      <Legend
+        onMouseEnter={handleLegendMouseEnter}
+        onMouseLeave={handleLegendMouseLeave}
+      />
     </LineChart>
   );
 };

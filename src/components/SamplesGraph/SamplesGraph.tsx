@@ -1,6 +1,6 @@
 import "./SamplesGraph.css";
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState, useEffect } from "react";
 import { useClassSelect } from "../../contexts/ClassSelectContext";
 import { useSampleList } from "../../contexts/SampleListContext";
 import { useGraphType } from "../../contexts/GraphTypeContext";
@@ -27,11 +27,29 @@ interface Props {
   handleClickOpen: (sample: Sample) => void;
 }
 
+export interface IOpacityState {
+  [key: string]: number;
+}
+
 const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
   const { sampleListState } = useSampleList();
   const { classSelectState } = useClassSelect();
   const { graphTypeState } = useGraphType();
   const { requestProgressState } = useRequestProgress();
+  const [opacityState, setOpacityState] =
+    useState<IOpacityState | undefined>(undefined);
+
+  useEffect(() => {
+    setOpacityState(
+      classSelectState.classes?.reduce((obj: IOpacityState, _class) => {
+        obj = {
+          ...obj,
+          [_class.name]: 1,
+        };
+        return obj;
+      }, {})
+    );
+  }, [classSelectState]);
 
   const renderGraph = (): JSX.Element => {
     switch (graphTypeState.name) {
@@ -42,6 +60,8 @@ const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
             classSelectState={classSelectState}
             width={width}
             height={height}
+            opacity={opacityState}
+            setOpacity={setOpacityState}
             handleClickOpen={handleClickOpen}
           />
         );
@@ -52,6 +72,8 @@ const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
             classSelectState={classSelectState}
             width={width}
             height={height}
+            opacity={opacityState}
+            setOpacity={setOpacityState}
             handleClickOpen={handleClickOpen}
           />
         );
@@ -62,6 +84,8 @@ const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
             classSelectState={classSelectState}
             width={width}
             height={height}
+            opacity={opacityState}
+            setOpacity={setOpacityState}
             handleClickOpen={handleClickOpen}
           />
         );

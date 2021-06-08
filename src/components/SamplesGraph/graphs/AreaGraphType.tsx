@@ -17,12 +17,15 @@ import { Sample } from "../../../model/Sample";
 
 import palette from "../../../util/ColorPalette";
 import CustomTooltip from "../util/CustomTooltip";
+import { IOpacityState } from "../SamplesGraph";
 
 interface Props {
   sampleListState: SampleListState;
   classSelectState: ClassSelectState;
   width: number;
   height: number;
+  opacity: IOpacityState | undefined;
+  setOpacity: Function;
   handleClickOpen: (sample: Sample) => void;
 }
 
@@ -31,6 +34,8 @@ const AreaGraphType: React.FC<Props> = ({
   classSelectState,
   width,
   height,
+  opacity,
+  setOpacity,
   handleClickOpen,
 }) => {
   const formatDate = (date: Date) => {
@@ -50,6 +55,23 @@ const AreaGraphType: React.FC<Props> = ({
 
   const brushTickFormatter = (payload: any, index: number): React.ReactText => {
     return formatDate(new Date(payload));
+  };
+
+  const handleLegendMouseEnter = (event: any) => {
+    let className = event.payload.name as string;
+    if (opacity) {
+      Object.keys(opacity).forEach((value) => {
+        if (value !== className) opacity[value] = 0.2;
+      });
+      setOpacity({...opacity});
+    }
+  };
+
+  const handleLegendMouseLeave = (event: any) => {
+    if (opacity) {
+      Object.keys(opacity).forEach((value) => (opacity[value] = 1));
+      setOpacity({...opacity});
+    }
   };
 
   return (
@@ -93,7 +115,10 @@ const AreaGraphType: React.FC<Props> = ({
             }}
             stackId="a"
             fill={palette[index % palette.length]}
+            strokeOpacity={opacity ? opacity[_class.name] : 1}
+            fillOpacity={opacity ? opacity[_class.name] : 1}
             name={_class.name}
+            key={_class.name}
             activeDot={{
               onClick: (event, data) => {
                 let dataWithPayload = data as any;
@@ -118,7 +143,9 @@ const AreaGraphType: React.FC<Props> = ({
         position={{ y: 50 }}
       />
       <Brush dataKey="date" tickFormatter={brushTickFormatter} />
-      <Legend />
+      <Legend
+        onMouseEnter={handleLegendMouseEnter}
+        onMouseLeave={handleLegendMouseLeave} />
     </AreaChart>
   );
 };
