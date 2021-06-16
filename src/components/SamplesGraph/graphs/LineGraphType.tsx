@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Brush,
   CartesianGrid,
@@ -38,6 +38,11 @@ const LineGraphType: React.FC<Props> = ({
   setOpacity,
   handleClickOpen,
 }) => {
+  const [brushStart, setBrushStart] = useState<number>(0);
+  const [brushEnd, setBrushEnd] = useState<number>(
+    sampleListState.samples.length
+  );
+
   const formatDate = (date: Date) => {
     let dd: number | string = date.getDate();
     let mm: number | string = date.getMonth() + 1;
@@ -63,15 +68,22 @@ const LineGraphType: React.FC<Props> = ({
       Object.keys(opacity).forEach((value) => {
         if (value !== className) opacity[value] = 0.2;
       });
-      setOpacity({...opacity});
+      setOpacity({ ...opacity });
+      handleBrushChange({ startIndex: brushStart, endIndex: brushEnd });
     }
   };
 
   const handleLegendMouseLeave = (event: any) => {
     if (opacity) {
       Object.keys(opacity).forEach((value) => (opacity[value] = 1));
-      setOpacity({...opacity});
+      setOpacity({ ...opacity });
+      handleBrushChange({ startIndex: brushStart, endIndex: brushEnd });
     }
+  };
+
+  const handleBrushChange = (change: any) => {
+    setBrushStart(change.startIndex);
+    setBrushEnd(change.endIndex);
   };
 
   return (
@@ -141,7 +153,13 @@ const LineGraphType: React.FC<Props> = ({
         isAnimationActive={false}
         position={{ y: 50 }}
       />
-      <Brush dataKey="date" tickFormatter={brushTickFormatter} />
+      <Brush
+        dataKey="date"
+        startIndex={brushStart}
+        endIndex={brushEnd}
+        tickFormatter={brushTickFormatter}
+        onChange={handleBrushChange}
+      />
       <Legend
         onMouseEnter={handleLegendMouseEnter}
         onMouseLeave={handleLegendMouseLeave}
