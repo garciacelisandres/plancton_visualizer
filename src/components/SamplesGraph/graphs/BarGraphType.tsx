@@ -83,7 +83,7 @@ const BarGraphType: React.FC<Props> = ({
     timeout = setTimeout(() => {
       setBrushStart(change.startIndex);
       setBrushEnd(change.endIndex);
-    }, 1000);
+    }, 200);
   };
 
   return (
