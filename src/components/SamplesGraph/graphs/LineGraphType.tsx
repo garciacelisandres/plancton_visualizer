@@ -58,7 +58,11 @@ const LineGraphType: React.FC<Props> = ({
   };
 
   const brushTickFormatter = (payload: any, index: number): React.ReactText => {
-    return formatDate(new Date(payload));
+    try {
+      return formatDate(new Date(payload));
+    } catch {
+      return "";
+    }
   };
 
   const handleLegendMouseEnter = (event: any) => {
