@@ -1,6 +1,6 @@
 import "./GraphsStyle.css";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Bar,
   BarChart,
@@ -38,6 +38,10 @@ const BarGraphType: React.FC<Props> = ({
   setOpacity,
   handleClickOpen,
 }) => {
+  var timeout: any;
+  const [brushStart, setBrushStart] = useState<number>(0);
+  const [brushEnd, setBrushEnd] = useState<number | undefined>(undefined);
+
   const formatDate = (date: Date) => {
     let dd: number | string = date.getDate();
     let mm: number | string = date.getMonth() + 1;
@@ -72,6 +76,14 @@ const BarGraphType: React.FC<Props> = ({
       Object.keys(opacity).forEach((value) => (opacity[value] = 1));
       setOpacity({ ...opacity });
     }
+  };
+
+  const handleBrushChange = (change: any) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      setBrushStart(change.startIndex);
+      setBrushEnd(change.endIndex);
+    }, 1000);
   };
 
   return (
@@ -133,7 +145,13 @@ const BarGraphType: React.FC<Props> = ({
         isAnimationActive={false}
         position={{ y: 50 }}
       />
-      <Brush dataKey="date" tickFormatter={brushTickFormatter} />
+      <Brush
+        dataKey="date"
+        startIndex={brushStart}
+        endIndex={brushEnd}
+        tickFormatter={brushTickFormatter}
+        onChange={handleBrushChange}
+      />
       <Legend
         onMouseEnter={handleLegendMouseEnter}
         onMouseLeave={handleLegendMouseLeave}

@@ -1,3 +1,5 @@
+import "./GraphsStyle.css";
+
 import React, { useState } from "react";
 import {
   Brush,
@@ -16,8 +18,6 @@ import { Sample } from "../../../model/Sample";
 import palette from "../../../util/ColorPalette";
 import { IOpacityState } from "../SamplesGraph";
 import CustomTooltip from "../util/CustomTooltip";
-
-import "./GraphsStyle.css";
 
 interface Props {
   sampleListState: SampleListState;
@@ -38,6 +38,7 @@ const LineGraphType: React.FC<Props> = ({
   setOpacity,
   handleClickOpen,
 }) => {
+  var timeout: any;
   const [brushStart, setBrushStart] = useState<number>(0);
   const [brushEnd, setBrushEnd] = useState<number | undefined>(undefined);
 
@@ -80,8 +81,11 @@ const LineGraphType: React.FC<Props> = ({
   };
 
   const handleBrushChange = (change: any) => {
-    setBrushStart(change.startIndex);
-    setBrushEnd(change.endIndex);
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      setBrushStart(change.startIndex);
+      setBrushEnd(change.endIndex);
+    }, 1000);
   };
 
   return (
