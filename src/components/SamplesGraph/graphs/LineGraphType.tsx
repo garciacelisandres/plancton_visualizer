@@ -39,9 +39,7 @@ const LineGraphType: React.FC<Props> = ({
   handleClickOpen,
 }) => {
   const [brushStart, setBrushStart] = useState<number>(0);
-  const [brushEnd, setBrushEnd] = useState<number>(
-    sampleListState.samples.length
-  );
+  const [brushEnd, setBrushEnd] = useState<number | undefined>(undefined);
 
   const formatDate = (date: Date) => {
     let dd: number | string = date.getDate();
