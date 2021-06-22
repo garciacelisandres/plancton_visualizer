@@ -106,11 +106,17 @@ const BarGraphType: React.FC<Props> = ({
         dataKey="date"
         tick={({ x, y, payload }) => {
           let date: Date = payload.value as Date;
-          return (
-            <text x={x - 30} y={y + 15}>
-              {`${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`}
-            </text>
-          );
+          if (date) {
+            return (
+              <text x={x - 30} y={y + 15}>
+                {`${
+                  date.getMonth() + 1
+                }/${date.getDate()}/${date.getFullYear()}`}
+              </text>
+            );
+          } else {
+            return <text></text>;
+          }
         }}
         interval={Math.floor(sampleListState.samples.length / 6)}
       />
