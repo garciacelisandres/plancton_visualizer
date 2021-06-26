@@ -64,7 +64,7 @@ class ServerCall {
         let samples_list: Sample[] = [];
         let samples_response = data.data.samples;
         samples_response.forEach((sample: any) => {
-          let sample_id: string = sample["_id"];
+          let sample_id: string = sample["id"];
           let sample_name: string = sample["name"];
           let sample_date: Date = new Date(
             Math.floor(sample["date_retrieved"]) * 1000
@@ -110,7 +110,7 @@ class ServerCall {
         let classes_list: Class[] = [];
         let classes_response: any[] = data.data.classes;
         classes_response.forEach((class_obj) => {
-          let class_id: string = class_obj["_id"];
+          let class_id: string = class_obj["id"];
           let class_name: string = class_obj["name"];
           classes_list.push(new Class(class_id, class_name));
         });
