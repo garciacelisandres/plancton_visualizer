@@ -135,6 +135,7 @@ const AreaGraphType: React.FC<Props> = ({
                 )?.value;
               return value;
             }}
+            isAnimationActive={false}
             stackId="a"
             fill={palette[index % palette.length]}
             strokeOpacity={opacity ? opacity[_class.name] : 1}
@@ -170,6 +171,7 @@ const AreaGraphType: React.FC<Props> = ({
         endIndex={brushEnd}
         tickFormatter={brushTickFormatter}
         onChange={handleBrushChange}
+        onDoubleClick={() => handleBrushChange({startIndex: 0, endIndex: undefined})}
       />
       <Legend
         onMouseEnter={handleLegendMouseEnter}
