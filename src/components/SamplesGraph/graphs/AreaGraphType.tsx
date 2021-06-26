@@ -178,7 +178,7 @@ const AreaGraphType: React.FC<Props> = ({
         endIndex={brushEnd}
         tickFormatter={brushTickFormatter}
         onChange={handleBrushChange}
-        onKeyDown={handleBrushKeyDown}
+        onKeyPress={handleBrushKeyDown}
       />
       <Legend
         onMouseEnter={handleLegendMouseEnter}
