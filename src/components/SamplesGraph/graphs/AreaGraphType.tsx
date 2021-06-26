@@ -90,6 +90,13 @@ const AreaGraphType: React.FC<Props> = ({
     }, 200);
   };
 
+  const handleBrushKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "z") {
+      setBrushStart(0);
+      setBrushEnd(undefined);
+    }
+  };
+
   return (
     <AreaChart
       width={width}
@@ -171,7 +178,7 @@ const AreaGraphType: React.FC<Props> = ({
         endIndex={brushEnd}
         tickFormatter={brushTickFormatter}
         onChange={handleBrushChange}
-        onDoubleClick={() => handleBrushChange({startIndex: 0, endIndex: undefined})}
+        onKeyDown={handleBrushKeyDown}
       />
       <Legend
         onMouseEnter={handleLegendMouseEnter}
