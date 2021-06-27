@@ -42,14 +42,14 @@ const GridLayout = () => {
         x: 3,
         y: 7,
         w: 9,
-        h: 7,
+        h: 9,
         i: "graph",
       },
       {
         x: 0,
         y: 7,
         w: 3,
-        h: 7,
+        h: 9,
         i: "class-list",
       },
       {
