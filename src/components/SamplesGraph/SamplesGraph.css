@@ -6,3 +6,9 @@
     font-size: medium;
     color: rgb(94, 94, 94);
 }
+.overlay-button {
+    position: absolute !important;
+    top: 10px;
+    left: 90%;
+    z-index: 10;
+}
