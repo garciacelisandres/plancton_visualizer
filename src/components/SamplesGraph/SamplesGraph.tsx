@@ -20,6 +20,8 @@ import CircularProgress, {
 import { useRequestProgress } from "../../contexts/RequestProgressContext";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import ZoomOut from "@material-ui/icons/ZoomOut";
 
 interface Props {
   height: number;
@@ -38,6 +40,8 @@ const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
   const { requestProgressState } = useRequestProgress();
   const [opacityState, setOpacityState] =
     useState<IOpacityState | undefined>(undefined);
+  const [brushStart, setBrushStart] = useState<number>(0);
+  const [brushEnd, setBrushEnd] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     setOpacityState(
@@ -51,6 +55,13 @@ const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
     );
   }, [classSelectState]);
 
+  const handleBrushResetZoom = () => {
+    if(brushStart !== 0 || brushEnd !== undefined) {
+      setBrushStart(0);
+      setBrushEnd(undefined);
+    }
+  }
+
   const renderGraph = (): JSX.Element => {
     switch (graphTypeState.name) {
       case "bar":
@@ -62,6 +73,10 @@ const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
             height={height}
             opacity={opacityState}
             setOpacity={setOpacityState}
+            brushStart={brushStart}
+            setBrushStart={setBrushStart}
+            brushEnd={brushEnd}
+            setBrushEnd={setBrushEnd}
             handleClickOpen={handleClickOpen}
           />
         );
@@ -74,6 +89,10 @@ const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
             height={height}
             opacity={opacityState}
             setOpacity={setOpacityState}
+            brushStart={brushStart}
+            setBrushStart={setBrushStart}
+            brushEnd={brushEnd}
+            setBrushEnd={setBrushEnd}
             handleClickOpen={handleClickOpen}
           />
         );
@@ -86,6 +105,10 @@ const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
             height={height}
             opacity={opacityState}
             setOpacity={setOpacityState}
+            brushStart={brushStart}
+            setBrushStart={setBrushStart}
+            brushEnd={brushEnd}
+            setBrushEnd={setBrushEnd}
             handleClickOpen={handleClickOpen}
           />
         );
@@ -103,9 +126,18 @@ const SamplesGraph: React.FC<Props> = ({ height, width, handleClickOpen }) => {
       return (
         <>
           {classSelectState.classes && sampleListState.samples?.length > 0 ? (
-            <ResponsiveContainer width="95%" height="95%">
-              {renderGraph()}
-            </ResponsiveContainer>
+            <>
+              <IconButton
+                className="overlay-button"
+                onClick={handleBrushResetZoom}
+                onFocus={(event) => event.stopPropagation()}
+              >
+                <ZoomOut />
+              </IconButton>
+              <ResponsiveContainer width="95%" height="95%">
+                {renderGraph()}
+              </ResponsiveContainer>
+            </>
           ) : (
             <div className="samples-graph-nodata-container">
               <p>No data</p>

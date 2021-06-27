@@ -26,6 +26,10 @@ interface Props {
   height: number;
   opacity: IOpacityState | undefined;
   setOpacity: Function;
+  brushStart: number;
+  setBrushStart: Function;
+  brushEnd: number | undefined;
+  setBrushEnd: Function;
   handleClickOpen: (sample: Sample) => void;
 }
 
@@ -36,11 +40,13 @@ const AreaGraphType: React.FC<Props> = ({
   height,
   opacity,
   setOpacity,
+  brushStart,
+  setBrushStart,
+  brushEnd,
+  setBrushEnd,
   handleClickOpen,
 }) => {
   var timeout: any;
-  const [brushStart, setBrushStart] = useState<number>(0);
-  const [brushEnd, setBrushEnd] = useState<number | undefined>(undefined);
 
   const formatDate = (date: Date) => {
     let dd: number | string = date.getDate();
@@ -88,13 +94,6 @@ const AreaGraphType: React.FC<Props> = ({
       setBrushStart(change.startIndex);
       setBrushEnd(change.endIndex);
     }, 200);
-  };
-
-  const handleBrushKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "z") {
-      setBrushStart(0);
-      setBrushEnd(undefined);
-    }
   };
 
   return (
@@ -174,11 +173,11 @@ const AreaGraphType: React.FC<Props> = ({
       />
       <Brush
         dataKey="date"
+        stroke="#3f51b5"
         startIndex={brushStart}
         endIndex={brushEnd}
         tickFormatter={brushTickFormatter}
         onChange={handleBrushChange}
-        onKeyPress={handleBrushKeyDown}
       />
       <Legend
         onMouseEnter={handleLegendMouseEnter}
