@@ -4,6 +4,11 @@ import { Class } from "../model/Class";
 import { ACTION_REQUEST_PROGRESS_UPDATE } from "../contexts/reducers/requestProgress/RequestProgressActions";
 
 class ServerCall {
+  _errorNotifier: Function = () => {};
+  set errorNotifier(f: Function) {
+    this._errorNotifier = f;
+  }
+
   async getSamples(
     start_time: Date | undefined = undefined,
     end_time: Date | undefined = undefined,
@@ -90,6 +95,7 @@ class ServerCall {
         return samples_list;
       })
       .catch((err) => {
+        this._errorNotifier("Error while fetching samples. Try again.");
         let empty_list: Sample[] = [];
         return empty_list;
       });
@@ -117,6 +123,7 @@ class ServerCall {
         return classes_list;
       })
       .catch((err) => {
+        this._errorNotifier("Error while fetching classes. Try again.");
         let empty_list: Class[] = [];
         return empty_list;
       });
