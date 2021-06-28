@@ -2,6 +2,7 @@ import axios from "axios";
 import { Sample } from "../model/Sample";
 import { Class } from "../model/Class";
 import { ACTION_REQUEST_PROGRESS_UPDATE } from "../contexts/reducers/requestProgress/RequestProgressActions";
+import { exception } from "node:console";
 
 class ServerCall {
   _errorNotifier: Function = () => {};
@@ -96,14 +97,13 @@ class ServerCall {
       })
       .catch((err) => {
         this._errorNotifier("Error while fetching samples. Try again.");
-        let empty_list: Sample[] = [];
-        return empty_list;
+        throw new Error(`Error while fetching samples. ${err.message}`);
       });
     return retrieved;
   }
 
   async getClasses(): Promise<Class[]> {
-    var url = `${process.env.REACT_APP_API_URL}/samples/classes`;
+    var url = `https://plankton.westeurope.cloudapp.azure.com/api/v0.1/samples/classes`;
     let retrieved = await axios({
       method: "GET",
       url: url,
@@ -124,8 +124,7 @@ class ServerCall {
       })
       .catch((err) => {
         this._errorNotifier("Error while fetching classes. Try again.");
-        let empty_list: Class[] = [];
-        return empty_list;
+        throw new Error(`Error while fetching classes. ${err.message}`);
       });
     return retrieved;
   }

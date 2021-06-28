@@ -76,7 +76,7 @@ const GridLayout = () => {
             isResizable={false}
           >
             <div key="class-list">
-              <ClassesList height={rowHeight * 6} width={rowWidth * 6} />
+              <ClassesList height={rowHeight * 8} width={rowWidth * 6} />
             </div>
             <div key="graph">
               <SamplesGraph
