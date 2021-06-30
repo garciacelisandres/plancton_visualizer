@@ -2,7 +2,6 @@ import axios from "axios";
 import { Sample } from "../model/Sample";
 import { Class } from "../model/Class";
 import { ACTION_REQUEST_PROGRESS_UPDATE } from "../contexts/reducers/requestProgress/RequestProgressActions";
-import { exception } from "node:console";
 
 class ServerCall {
   _errorNotifier: Function = () => {};
@@ -103,7 +102,7 @@ class ServerCall {
   }
 
   async getClasses(): Promise<Class[]> {
-    var url = `https://plankton.westeurope.cloudapp.azure.com/api/v0.1/samples/classes`;
+    var url = `${process.env.REACT_APP_API_URL}/samples/classes`;
     let retrieved = await axios({
       method: "GET",
       url: url,
