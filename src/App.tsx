@@ -41,14 +41,6 @@ function App() {
       <div className="AppBarContainer">
         <AppBar position="static" className="AppBar">
           <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              className="AppBarMenuButton"
-            >
-              <MenuIcon />
-            </IconButton>
             <Typography variant="h5" className="AppBarTitle">
               <b unselectable="on">Plankton Visualizer</b>
             </Typography>
