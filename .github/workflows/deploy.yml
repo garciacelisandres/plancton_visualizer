@@ -4,18 +4,22 @@ on:
   push:
     branches: [ main ]
 jobs:
-  unitary-test-webapp:
+  unit-tests:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      
-      - name: Unit tests
-        run: echo The tests will be here.
+      - name: Check out
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.14.1
+      - run: npm ci
+      - run: npm test
   docker-push:
     name: Push Docker Image to GitHub Packages
     runs-on: ubuntu-latest
-    needs: [unitary-test-webapp]
+    needs: [unit-tests]
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
