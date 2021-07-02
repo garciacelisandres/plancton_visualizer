@@ -10,9 +10,7 @@ import "./GraphTypes.css";
 const GraphTypes = () => {
   const { graphTypeState, graphTypeDispatch } = useGraphType();
 
-  const selectGraphType = (
-    graphType: string
-  ) => {
+  const selectGraphType = (graphType: string) => {
     let graphTypeName = TypesList[graphType as keyof typeof TypesList];
     graphTypeDispatch({
       type: ACTION_GRAPH_TYPE_UPDATE,
@@ -26,7 +24,15 @@ const GraphTypes = () => {
         .map((_key, index) => TypesList[index])
         .filter((value) => typeof value === "string")
         .map((graphType, index) => (
-          <button key={index} onClick={() => selectGraphType(graphType)} className="capitalize graph-types-button">
+          <button
+            key={index}
+            onClick={() => selectGraphType(graphType)}
+            className={
+              graphTypeState.name === graphType
+                ? "capitalize graph-types-button graph-types-button-selected"
+                : "capitalize graph-types-button"
+            }
+          >
             {graphType.toString()} chart
           </button>
         ))}

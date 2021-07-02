@@ -129,7 +129,7 @@ const AreaGraphType: React.FC<Props> = ({
         allowDuplicatedCategory={false}
       />
       <YAxis />
-      <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+      <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
       {classSelectState.classes?.map((_class, index) =>
         _class ? (
           <Area

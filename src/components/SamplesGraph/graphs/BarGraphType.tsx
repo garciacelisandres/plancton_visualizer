@@ -127,7 +127,7 @@ const BarGraphType: React.FC<Props> = ({
         interval={Math.floor(sampleListState.samples.length / 6)}
       />
       <YAxis />
-      <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+      <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
       {classSelectState.classes?.map((_class, index) =>
         _class ? (
           <Bar
